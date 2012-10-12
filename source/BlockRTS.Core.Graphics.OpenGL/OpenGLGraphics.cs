@@ -12,16 +12,18 @@ namespace BlockRTS.Core.Graphics.OpenGL
     {
         private readonly IMessageBus _bus;
         private readonly IObservableTimer _timer;
+        private readonly ICamera _camera;
         private readonly OpenGLWindow _window;
-        public OpenGLGraphics(IMessageBus bus, IObservableTimer timer)
+        public OpenGLGraphics(IMessageBus bus, IObservableTimer timer,ICamera camera)
         {
             _bus = bus;
             _timer = timer;
+            _camera = camera;
         }
 
         public void Start()
         {
-            new Task(() => new OpenGLWindow(_bus,_timer).Run()).Start();
+            new Task(() => new OpenGLWindow(_bus,_timer,_camera).Run()).Start();
         }
     }
 }

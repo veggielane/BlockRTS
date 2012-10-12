@@ -11,10 +11,10 @@ namespace BlockRTS.Core.Graphics.Shapes
 {
     public class Cube
     {
-        public double Size { get; private set; }
-        public Vect3 Position { get; private set; }
-        public Quat Rotation { get; private set; }
-        public Color Color { get; private set; } 
+        public double Size { get; set; }
+        public Vect3 Position { get; set; }
+        public Quat Rotation { get; set; }
+        public Color Color { get;  set; } 
 
         public Cube()
         {

@@ -11,12 +11,13 @@ namespace BlockRTS.Core.Graphics.OpenGL.Assets
     public class AssetManager
     {
         private readonly Dictionary<Type,ITexture> _textures = new Dictionary<Type, ITexture>();
+        private readonly Dictionary<Type, IShaderProgram> _shaderPrograms = new Dictionary<Type, IShaderProgram>();
         
         public void Load()
         {
-
-            //Load Texture
-            foreach (var viewtype in AppDomain.CurrentDomain.GetAssemblies().ToList().SelectMany(s => s.GetTypes()).Where(p => typeof(ITexture).IsAssignableFrom(p) && p.IsClass && !p.IsAbstract).ToList())
+            var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).ToList();
+            //Load Textures
+            foreach (var viewtype in types.Where(p => p.IsClass && !p.IsAbstract && typeof(ITexture).IsAssignableFrom(p)))
             {
                 var inst = Activator.CreateInstance(viewtype) as ITexture;
                 if (inst != null)
@@ -25,11 +26,29 @@ namespace BlockRTS.Core.Graphics.OpenGL.Assets
                     _textures.Add(viewtype, inst);
                 }
             }
+
+            foreach (var viewtype in types.Where(p => p.IsClass && !p.IsAbstract && typeof(IShaderProgram).IsAssignableFrom(p)))
+            {
+                var inst = Activator.CreateInstance(viewtype) as IShaderProgram;
+                if (inst != null)
+                {
+                    inst.Link();
+                    inst.AddUniforms();
+                    _shaderPrograms.Add(viewtype, inst);
+                }
+            }
         }
         
         public ITexture Texture<T>() where T : ITexture
         {
             return _textures.ContainsKey(typeof(T)) ? _textures[typeof(T)] : new DefaultTexture();
         }
+
+        public IShaderProgram Shader<T>() where T : IShaderProgram
+        {
+
+            return _shaderPrograms.ContainsKey(typeof(T)) ? _shaderPrograms[typeof(T)] : new DefaultShaderProgram();
+        }
+
     }
 }

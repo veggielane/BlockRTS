@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,57 +11,48 @@ namespace BlockRTS.Core.Graphics.OpenGL.Shaders
     {
         int Handle { get; }
         void Link();
-        void Add(IShader shader);
-        void AddUniform(string name);
-        void UpdateUniform(string name, Matrix4 matrix);
+        void AddShader(IShader shader);
+        IDictionary<string,IUniform> Uniforms { get; }
+        void AddUniforms();
     }
 
-    public abstract class BaseShaderProgram:IShaderProgram
+    public interface IUniform
+    {
+        int Handle { get; }
+        string Name { get; }
+        object Data { set; }
+    }
+
+    public interface IUniform<T> : IUniform
+    {
+        new T Data { set; }
+    }
+
+
+    public class UniformMatrix4:IUniform<Matrix4>
+
     {
         public int Handle { get; private set; }
-        public readonly Dictionary<string, int> Uniforms = new Dictionary<string, int>();
+        public string Name { get; private set; }
 
-        public BaseShaderProgram()
+        public Matrix4 Data
         {
-            Handle = GL.CreateProgram();
+            set
+            {
+                GL.UniformMatrix4(Handle, false, ref value);
+            }
         }
 
-
-        public void Bind()
+        object IUniform.Data
         {
-            GL.UseProgram(Handle);
+            set { Data = (Matrix4)value; }
         }
 
-        public void UnBind()
+        public UniformMatrix4(string name, IShaderProgram program)
         {
-            GL.UseProgram(0);
-        }
-
-
-        public void Link()
-        {
-            string info;
-            GL.LinkProgram(Handle);
-            GL.GetProgramInfoLog(Handle, out info);
-            Console.WriteLine(info);
-
-            ErrorCode err = GL.GetError();
-            if (err != ErrorCode.NoError)
-                Console.WriteLine("Error at Shader: " + err.ToString());
-        }
-
-        public void Add(IShader shader)
-        {
-            shader.Compile();
-            GL.AttachShader(Handle, shader.Handle);
-        }
-        public void AddUniform(string name)
-        {
-            Uniforms.Add(name, GL.GetUniformLocation(Handle, name));
-        }
-        public void UpdateUniform(string name, Matrix4 matrix)
-        {
-            GL.UniformMatrix4(Uniforms[name], false, ref matrix);
+            Name = name;
+            Handle = GL.GetUniformLocation(program.Handle, name);
         }
     }
 }
+

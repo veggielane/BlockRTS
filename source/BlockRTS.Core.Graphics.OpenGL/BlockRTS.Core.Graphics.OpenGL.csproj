@@ -53,12 +53,17 @@
     <Compile Include="OpenGLGraphics.cs" />
     <Compile Include="OpenGLWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shaders\BaseFragmentShader.cs" />
+    <Compile Include="Shaders\BaseShader.cs" />
+    <Compile Include="Shaders\BaseShaderProgram.cs" />
+    <Compile Include="Shaders\DefaultShaderProgram.cs" />
     <Compile Include="Shaders\IAsset.cs" />
     <Compile Include="Shaders\IShader.cs" />
     <Compile Include="Shaders\IShaderProgram.cs" />
     <Compile Include="Assets\Textures\Texture.cs" />
     <Compile Include="Assets\VAO.cs" />
     <Compile Include="Assets\VBO.cs" />
+    <Compile Include="Shaders\BaseVertexShader.cs" />
     <Compile Include="Vertices\OpenGLVertex.cs" />
   </ItemGroup>
   <ItemGroup>
