@@ -8,7 +8,7 @@ using BlockRTS.Core.Graphics.OpenGL.Shaders;
 
 namespace BlockRTS.Core.Graphics.OpenGL.Assets
 {
-    public class AssetManager
+    public class AssetManager:IAssetManager
     {
         private readonly Dictionary<Type,ITexture> _textures = new Dictionary<Type, ITexture>();
         private readonly Dictionary<Type, IShaderProgram> _shaderPrograms = new Dictionary<Type, IShaderProgram>();
@@ -46,9 +46,25 @@ namespace BlockRTS.Core.Graphics.OpenGL.Assets
 
         public IShaderProgram Shader<T>() where T : IShaderProgram
         {
-
-            return _shaderPrograms.ContainsKey(typeof(T)) ? _shaderPrograms[typeof(T)] : new DefaultShaderProgram();
+            IShaderProgram program;
+            if(_shaderPrograms.ContainsKey(typeof(T)))
+            {
+                program = _shaderPrograms[typeof (T)];
+            }else
+            {
+                program = new DefaultShaderProgram();
+                program.AddUniforms();
+            }
+            return program;
         }
 
+    }
+
+
+    public interface IAssetManager
+    {
+        void Load();
+        ITexture Texture<T>() where T : ITexture;
+        IShaderProgram Shader<T>() where T : IShaderProgram;
     }
 }

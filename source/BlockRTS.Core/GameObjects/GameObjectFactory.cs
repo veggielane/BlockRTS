@@ -11,12 +11,12 @@ namespace BlockRTS.Core.GameObjects
 {
     public class GameObjectFactory : IGameObjectFactory
     {
-        private readonly IGameObjectCreator _creator;
+        private readonly IObjectCreator _creator;
 
         public ConcurrentDictionary<Guid, IGameObject> GameObjects { get; protected set; }
         public IMessageBus Bus { get; protected set; }
 
-        public GameObjectFactory(IMessageBus bus,IGameObjectCreator creator)
+        public GameObjectFactory(IMessageBus bus,IObjectCreator creator)
         {
             _creator = creator;
             GameObjects = new ConcurrentDictionary<Guid, IGameObject>();
@@ -28,7 +28,7 @@ namespace BlockRTS.Core.GameObjects
 
         public void CreateGameObject(GameObjectRequest m)
         {
-            var go = _creator.Create(m.GameObjectType,m.Transformation);
+            var go = _creator.CreateGameObject(m.GameObjectType,m.Transformation);
             if(go != null)
             {
                  GameObjects.TryAdd(go.Id, go);

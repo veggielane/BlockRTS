@@ -23,5 +23,9 @@ namespace BlockRTS.Core
         {
             return string.Format(format, args);
         }
+        public static double NextDouble(this Random rnd, double min, double max)
+        {
+            return (max - min) * rnd.NextDouble() + min;
+        }
     }
 }

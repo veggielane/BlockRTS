@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BlockRTS.Core.GameObjects;
+using BlockRTS.Core.Messaging;
 
 namespace BlockRTS.Core.Graphics
 {
-    public interface IGameObjectView
+    public interface IViewManager:IHasMessageBus
     {
-        IGameObject GameObject { get; }
-        bool Loaded { get; }
+        Dictionary<IGameObject, IView> Views { get; }
         void Load();
-        void UnLoad();
         void Update(double delta);
-        void Render(ICamera camera);
+        void Render();
     }
 }

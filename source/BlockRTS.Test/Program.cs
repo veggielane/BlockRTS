@@ -7,6 +7,7 @@ using BlockRTS.Core;
 using BlockRTS.Core.GameObjects;
 using BlockRTS.Core.Graphics;
 using BlockRTS.Core.Graphics.OpenGL;
+using BlockRTS.Core.Graphics.OpenGL.Assets;
 using BlockRTS.Core.Maths;
 using BlockRTS.Core.Messaging;
 using BlockRTS.Core.Timing;
@@ -39,24 +40,34 @@ namespace BlockRTS.Test
             Bind<IGraphics>().To<OpenGLGraphics>().InSingletonScope();
             Bind<IObservableTimer>().To<AsyncObservableTimer>().InSingletonScope();
             Bind<IGameObjectFactory>().To<GameObjectFactory>().InSingletonScope();
-            Bind<IGameObjectCreator>().To<NinjectGameObjectCreator>().InSingletonScope();
+            Bind<IObjectCreator>().To<NinjectObjectCreator>().InSingletonScope();
 
             Bind<ICamera>().To<RTSCamera>().InSingletonScope();
+
+            Bind<IViewManager>().To<ViewManager>().InSingletonScope();
+
+
+            Bind<IAssetManager>().To<AssetManager>().InSingletonScope();
         }
     }
 
-    public class NinjectGameObjectCreator:IGameObjectCreator
+    public class NinjectObjectCreator:IObjectCreator
     {
         private readonly IKernel _kernal;
 
-        public NinjectGameObjectCreator(IKernel kernal)
+        public NinjectObjectCreator(IKernel kernal)
         {
             _kernal = kernal;
         }
 
-        public IGameObject Create(Type gameObjectType, Mat4 transformation)
+        public IGameObject CreateGameObject(Type gameObjectType, Mat4 transformation)
         {
             return (IGameObject)_kernal.Get(gameObjectType, new ConstructorArgument("transformation", transformation));
+        }
+
+        public IView CreateView(Type viewType,IGameObject gameObject)
+        {
+            return (IView)_kernal.Get(viewType, new ConstructorArgument("gameObject", gameObject));
         }
     }
 }

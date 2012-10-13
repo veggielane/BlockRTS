@@ -9,6 +9,7 @@ namespace BlockRTS.Core
     {
         bool Running { get; }
         void Start();
+        void Stop();
 
         IGraphics Graphics { get; }
         IObservableTimer Timer { get; }
