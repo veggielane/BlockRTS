@@ -1,3 +1,4 @@
+using System;
 using BlockRTS.Core.Maths;
 
 namespace BlockRTS.Core.Graphics
@@ -31,7 +32,7 @@ namespace BlockRTS.Core.Graphics
             Eye = Vect3.Zero;
             Target = Vect3.Zero;
             Up = Vect3.UnitY;
-            Projection = Mat4.Identity;
+
         }
     }
 }

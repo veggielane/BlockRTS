@@ -294,6 +294,11 @@ namespace BlockRTS.Core.Maths
                    + "|" + this[4, 1] + "," + this[4, 2] + "," + this[4, 3] + "," + this[4, 4] + "|";
         }
 
+        public Vect3 ToVect3()
+        {
+            return new Vect3(X,Y,Z);
+        }
+
         public static Mat4 operator +(Mat4 m1, Mat4 m2)
         {
             return m1.Add(m2);

@@ -10,9 +10,11 @@ namespace BlockRTS.Core.Graphics
 {
     public interface IViewManager:IHasMessageBus
     {
-        Dictionary<IGameObject, IView> Views { get; }
+        IDictionary<IGameObject, IView> Views { get; }
         void Load();
         void Update(double delta);
         void Render();
+
+        IBatchView Batch<T>() where T : IBatchView;
     }
 }

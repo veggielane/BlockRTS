@@ -122,5 +122,10 @@ namespace BlockRTS.Core.Maths
         {
             return "Vector3({0},{1},{2})".Fmt(X, Y, Z);
         }
+
+        public Mat4 ToMat4()
+        {
+            return Mat4.Translate(this);
+        }
     }
 }

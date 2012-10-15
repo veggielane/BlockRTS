@@ -20,24 +20,27 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
     public class BlockView : IView
     {
         private readonly IAssetManager _assets;
+        private readonly IViewManager _viewManager;
         private readonly BaseBlock _gameObject;
 
         public IGameObject GameObject { get { return _gameObject; } }
         public bool Loaded { get; private set; }
 
-        private VAO _cubevao;
-        private IShaderProgram _shader;
+        //private VAO _cubevao;
+        //private IShaderProgram _shader;
 
-        public BlockView(IAssetManager assets, IGameObject gameObject)
+        public BlockView(IAssetManager assets, IGameObject gameObject,IViewManager viewManager)
         {
             _assets = assets;
+            _viewManager = viewManager;
             _gameObject = (BaseBlock)gameObject;
         }
 
         public void Load()
         {
-            _shader = _assets.Shader<DefaultShaderProgram>();
-            _cubevao = new VAO(_shader, new Cube { Color =_gameObject.BlockColor }.ToMesh().ToVBO());
+            _viewManager.Batch<BlockBatchView>().Add(_gameObject);
+            //_shader = _assets.Shader<DefaultShaderProgram>();
+            //_cubevao = new VAO(_shader, new Cube { Color =_gameObject.BlockColor }.ToMesh().ToVBO());
             Loaded = true;
         }
 
@@ -53,13 +56,13 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
 
         public void Render()
         {
-            using (Bind.Asset(_shader))
-            using (Bind.Asset(_assets.Texture<DefaultTexture>()))
-            using (new Bind(_cubevao))
-            {
-                _shader.Uniforms["position"].Data = GameObject.Transformation.ToMatrix4();
-                GL.DrawArrays(_cubevao.VBO.BeginMode, 0, _cubevao.VBO.Count);
-            }
+            //using (Bind.Asset(_shader))
+            //using (Bind.Asset(_assets.Texture<DefaultTexture>()))
+            //using (new Bind(_cubevao))
+            //{
+            //    _shader.Uniforms["position"].Data = GameObject.Transformation.ToMatrix4();
+            //    GL.DrawArrays(_cubevao.VBO.BeginMode, 0, _cubevao.VBO.Count);
+            //}
         }
     }
 }

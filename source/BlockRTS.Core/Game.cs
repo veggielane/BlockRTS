@@ -9,6 +9,7 @@ using BlockRTS.Core.Graphics;
 using BlockRTS.Core.Maths;
 using BlockRTS.Core.Messaging;
 using BlockRTS.Core.Messaging.Messages;
+using BlockRTS.Core.Physics;
 using BlockRTS.Core.Timing;
 
 namespace BlockRTS.Core
@@ -75,9 +76,14 @@ namespace BlockRTS.Core
 
         private void Update(TickTime tickTime)
         {
-            foreach (var gameObject in Factory.GameObjects)
+            foreach (var gameObject in Factory.GameObjects.Values)
             {
-                gameObject.Value.Update(tickTime);
+                var hasPhysics = gameObject as IHasPhysics;
+                if (hasPhysics != null)
+                {
+                    hasPhysics.Body.Update(tickTime);
+                }
+                gameObject.Update(tickTime);
             }
         }
     }

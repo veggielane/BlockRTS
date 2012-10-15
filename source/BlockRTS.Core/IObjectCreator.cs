@@ -9,7 +9,7 @@ namespace BlockRTS.Core
     {
         IGameObject CreateGameObject(Type gameObjectType, Mat4 transformation);
         IView CreateView(Type viewType, IGameObject gameObject);
-
+        IBatchView CreateBatchView(Type viewType);
        // void Bind(Type )
     }
 }

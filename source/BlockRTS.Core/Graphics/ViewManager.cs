@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,9 @@ namespace BlockRTS.Core.Graphics
         public IMessageBus Bus { get; private set; }
         public ICamera Camera { get; set; }
 
-        public Dictionary<IGameObject,IView> Views { get; private set; }
+        public IDictionary<IGameObject,IView> Views { get; private set; }
+
+        private readonly Dictionary<Type, IBatchView> _batchViews = new Dictionary<Type, IBatchView>();
 
         private readonly Dictionary<Type, Type> _availableViews = new Dictionary<Type, Type>();
 
@@ -24,7 +27,7 @@ namespace BlockRTS.Core.Graphics
             _creator = creator;
             Bus = bus;
             Camera = camera;
-            Views = new Dictionary<IGameObject, IView>();
+            Views = new ConcurrentDictionary<IGameObject, IView>();
 
             foreach (var viewtype in AppDomain.CurrentDomain.GetAssemblies().ToList().SelectMany(s => s.GetTypes()).Where(p => typeof(IView).IsAssignableFrom(p) && p.IsClass && p.IsDefined(typeof(BindViewAttribute), false)).ToList())
             {
@@ -51,6 +54,17 @@ namespace BlockRTS.Core.Graphics
 
         public void Load()
         {
+            //load Batch
+            var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).ToList();
+            foreach (var batch in types.Where(p => p.IsClass && !p.IsAbstract && typeof(IBatchView).IsAssignableFrom(p)))
+            {
+                var inst = _creator.CreateBatchView(batch);
+                if (inst != null)
+                {
+                    inst.Load();
+                    _batchViews.Add(batch, inst);
+                }
+            }
             foreach (var gameObjectView in Views)
             {
                 if (!gameObjectView.Value.Loaded)
@@ -66,6 +80,10 @@ namespace BlockRTS.Core.Graphics
                     gameObjectView.Value.Load();
                 gameObjectView.Value.Update(delta);
             }
+            foreach (var batchView in _batchViews.Values)
+            {
+                batchView.Update(delta);
+            }
         }
 
         public void Render()
@@ -74,6 +92,15 @@ namespace BlockRTS.Core.Graphics
             {
                 view.Render();
             }
+            foreach (var batchView in _batchViews.Values)
+            {
+                batchView.Render();
+            }
+        }
+
+        public IBatchView Batch<T>() where T : IBatchView
+        {
+            return _batchViews[typeof(T)];
         }
     }
 }

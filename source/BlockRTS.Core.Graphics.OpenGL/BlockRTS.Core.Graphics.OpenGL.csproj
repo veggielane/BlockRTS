@@ -65,6 +65,7 @@
     <Compile Include="Assets\VBO.cs" />
     <Compile Include="Shaders\BaseVertexShader.cs" />
     <Compile Include="Vertices\OpenGLVertex.cs" />
+    <Compile Include="Views\BlockBatchView.cs" />
     <Compile Include="Views\BlockView.cs" />
   </ItemGroup>
   <ItemGroup>

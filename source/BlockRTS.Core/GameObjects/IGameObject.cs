@@ -9,6 +9,6 @@ namespace BlockRTS.Core.GameObjects
     {
         Guid Id { get; }
         void Update(TickTime delta);
-        Mat4 Transformation { get; set; }
+        Mat4 Transformation { get; }
     }
 }

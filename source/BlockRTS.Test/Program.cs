@@ -69,5 +69,10 @@ namespace BlockRTS.Test
         {
             return (IView)_kernal.Get(viewType, new ConstructorArgument("gameObject", gameObject));
         }
+
+        public IBatchView CreateBatchView(Type viewType)
+        {
+            return (IBatchView)_kernal.Get(viewType);
+        }
     }
 }

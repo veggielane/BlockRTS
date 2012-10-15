@@ -41,9 +41,10 @@ namespace BlockRTS.Core.Graphics.OpenGL
             _assetManager = assetManager;
             _camera.Model = Mat4.Translate(0f, 0f, 0.0f);
             _camera.Eye = new Vect3(0.0f, 0.0f, 100.0f);
-
+            _camera.Projection = Mat4.CreatePerspectiveFieldOfView(Math.PI / 4.0, Width / (float)Height, 1, 512);
+            VSync = VSyncMode.Off;
+            
         }
-
 
         //private IShaderProgram _test;
 
@@ -68,16 +69,7 @@ namespace BlockRTS.Core.Graphics.OpenGL
             _assetManager.Load();
             _shader = _assetManager.Shader<DefaultShaderProgram>();
 
-
-
             _viewManager.Load();
-
-            // _test = new DefaultShaderProgram();
-            //_test.Link();
-            //_test.AddUniform("mvp");
-            //_test.AddUniform("position");
-
-
 
             _vbo = new VBO();
             var data = new List<OpenGLVertex>();
@@ -108,8 +100,6 @@ namespace BlockRTS.Core.Graphics.OpenGL
             _viewManager.Update(e.Time);
             using (new Bind(_shader))
             {
-                _camera.Model *= Mat4.RotateZ(Angle.FromDegrees(1))*Mat4.RotateY(Angle.FromDegrees(1))*
-                                 Mat4.RotateX(Angle.FromDegrees(1));
                 _shader.Uniforms["mvp"].Data = _camera.MVP.ToMatrix4();
                 _shader.Uniforms["position"].Data = Matrix4.Identity;
             }
@@ -134,7 +124,7 @@ namespace BlockRTS.Core.Graphics.OpenGL
             using (Bind.Asset(_assetManager.Texture<DefaultTexture>()))
             using (new Bind(_vao))
             {
-
+                _shader.Uniforms["position"].Data = Matrix4.Identity;
                 GL.DrawArrays(BeginMode.Lines, 0, _vbo.Count);
             }
 

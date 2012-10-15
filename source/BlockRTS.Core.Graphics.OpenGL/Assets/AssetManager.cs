@@ -12,7 +12,15 @@ namespace BlockRTS.Core.Graphics.OpenGL.Assets
     {
         private readonly Dictionary<Type,ITexture> _textures = new Dictionary<Type, ITexture>();
         private readonly Dictionary<Type, IShaderProgram> _shaderPrograms = new Dictionary<Type, IShaderProgram>();
-        
+
+
+        private IObjectCreator _objectCreator;
+
+        public AssetManager(IObjectCreator objectCreator)
+        {
+            _objectCreator = objectCreator;
+        }
+
         public void Load()
         {
             var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).ToList();
@@ -26,17 +34,19 @@ namespace BlockRTS.Core.Graphics.OpenGL.Assets
                     _textures.Add(viewtype, inst);
                 }
             }
-
-            foreach (var viewtype in types.Where(p => p.IsClass && !p.IsAbstract && typeof(IShaderProgram).IsAssignableFrom(p)))
+            //load shaders
+            foreach (var shadertype in types.Where(p => p.IsClass && !p.IsAbstract && typeof(IShaderProgram).IsAssignableFrom(p)))
             {
-                var inst = Activator.CreateInstance(viewtype) as IShaderProgram;
+                var inst = Activator.CreateInstance(shadertype) as IShaderProgram;
                 if (inst != null)
                 {
                     inst.Link();
                     inst.AddUniforms();
-                    _shaderPrograms.Add(viewtype, inst);
+                    _shaderPrograms.Add(shadertype, inst);
                 }
             }
+
+
         }
         
         public ITexture Texture<T>() where T : ITexture
@@ -57,8 +67,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Assets
             }
             return program;
         }
-
-    }
+ }
 
 
     public interface IAssetManager
