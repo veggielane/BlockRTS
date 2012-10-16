@@ -31,6 +31,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
 
         public void Add(IGameObject gameObject)
         {
+
             _gameObjects.Add(gameObject);
         }
 

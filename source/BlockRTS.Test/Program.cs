@@ -45,8 +45,6 @@ namespace BlockRTS.Test
             Bind<ICamera>().To<RTSCamera>().InSingletonScope();
 
             Bind<IViewManager>().To<ViewManager>().InSingletonScope();
-
-
             Bind<IAssetManager>().To<AssetManager>().InSingletonScope();
         }
     }
