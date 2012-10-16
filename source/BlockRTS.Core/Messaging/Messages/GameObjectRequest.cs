@@ -11,17 +11,19 @@ namespace BlockRTS.Core.Messaging.Messages
     public class GameObjectRequest : BaseMessage
     {
         public Type GameObjectType { get; private set; }
-        public Mat4 Transformation { get; private set; }
-
-        public GameObjectRequest(IGameTime timeSent, Type gameObjectType, Mat4 transformation) : base(timeSent)
+        public Vect3 Position { get; set; }
+        public Quat Rotation { get; set; }
+        public GameObjectRequest(IGameTime timeSent, Type gameObjectType, Vect3 position, Quat rotation)
+            : base(timeSent)
         {
             GameObjectType = gameObjectType;
-            Transformation = transformation;
+            Position = position;
+            Rotation = rotation;
         }
 
-        public static GameObjectRequest Create<T>(IGameTime timeSent, Mat4 transformation)
+        public static GameObjectRequest Create<T>(IGameTime timeSent, Vect3 position, Quat rotation)
         {
-            return new GameObjectRequest(timeSent,typeof(T),transformation);
+            return new GameObjectRequest(timeSent, typeof(T), position,rotation);
         }
 
         public override string ToString()

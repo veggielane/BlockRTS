@@ -5,17 +5,19 @@ using BlockRTS.Core.Timing;
 
 namespace BlockRTS.Core.GameObjects
 {
-    public abstract class BaseGameObject:IGameObject
+    public abstract class BaseGameObject : IGameObject
     {
         public Guid Id { get; private set; }
-        public Mat4 Transformation { get; set; }
+        public Vect3 Position { get; set; }
+        public Quat Rotation { get; set; }
         public abstract void Update(TickTime delta);
         public IMessageBus Bus { get; private set; }
-        protected BaseGameObject(IMessageBus bus, Mat4 transformation)
+        protected BaseGameObject(IMessageBus bus, Vect3 position, Quat rotation)
         {
             Bus = bus;
+            Position = position;
+            Rotation = rotation;
             Id = Guid.NewGuid();
-            Transformation = transformation;
         }
     }
 }

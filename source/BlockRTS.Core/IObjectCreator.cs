@@ -7,7 +7,7 @@ namespace BlockRTS.Core
 {
     public interface IObjectCreator
     {
-        IGameObject CreateGameObject(Type gameObjectType, Mat4 transformation);
+        IGameObject CreateGameObject(Type gameObjectType, Vect3 position, Quat rotation);
         IView CreateView(Type viewType, IGameObject gameObject);
         IBatchView CreateBatchView(Type viewType);
        // void Bind(Type )

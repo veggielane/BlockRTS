@@ -16,7 +16,7 @@ namespace BlockRTS.Core.Graphics.OpenGL
         private readonly ICamera _camera;
         private readonly IViewManager _viewManager;
         private readonly IAssetManager _assetManager;
-        private readonly OpenGLWindow _window;
+       // private readonly OpenGLWindow _window;
         public OpenGLGraphics(IMessageBus bus, IObservableTimer timer, ICamera camera, IViewManager viewManager, IAssetManager assetManager)
         {
             _bus = bus;

@@ -28,7 +28,7 @@ namespace BlockRTS.Core.GameObjects
 
         public void CreateGameObject(GameObjectRequest m)
         {
-            var go = _creator.CreateGameObject(m.GameObjectType,m.Transformation);
+            var go = _creator.CreateGameObject(m.GameObjectType, m.Position, m.Rotation);
             if(go != null)
             {
                  GameObjects.TryAdd(go.Id, go);

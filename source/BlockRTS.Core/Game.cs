@@ -51,22 +51,22 @@ namespace BlockRTS.Core
             Graphics.Start();
             Bus.Add(new DebugMessage(Timer.LastTickTime, "Started Game Engine"));
             var _rand = new Random();
-            var results = Enumerable.Range(0, _rand.Next(100))
+            var results = Enumerable.Range(0, _rand.Next(1000))
                         .Select(r => new { x = _rand.NextDouble(-20.0, 20.0), y = _rand.NextDouble(-20.0, 20.0), z = _rand.NextDouble(-20.0, 20.0) })
                         .ToList();
-
+            
             foreach (var result in results)
             {
                 if(_rand.Next(3) == 2)
                 {
-                    Bus.Add(GameObjectRequest.Create<WhiteBlock>(Timer.LastTickTime, Mat4.Translate(result.x, result.y, result.z)));
+                    Bus.Add(GameObjectRequest.Create<WhiteBlock>(Timer.LastTickTime, new Vect3(result.x, result.y, result.z), Quat.Identity));
                 }else
                 {
-                    Bus.Add(GameObjectRequest.Create<BlueBlock>(Timer.LastTickTime, Mat4.Translate(result.x, result.y, result.z)));
+                    Bus.Add(GameObjectRequest.Create<BlueBlock>(Timer.LastTickTime,  new Vect3(result.x, result.y, result.z), Quat.Identity));
                 }
-                
             }
-            Bus.Add(GameObjectRequest.Create<WhiteBlock>(Timer.LastTickTime, Mat4.Identity));
+
+            Bus.Add(GameObjectRequest.Create<WhiteBlock>(Timer.LastTickTime,  Vect3.Zero, Quat.Identity));
         }
 
         public void Stop()
@@ -85,8 +85,6 @@ namespace BlockRTS.Core
                     }
                     gameObject.Update(tickTime);
                 });
-
-
 
             /*
             foreach (var gameObject in Factory.GameObjects.Values)

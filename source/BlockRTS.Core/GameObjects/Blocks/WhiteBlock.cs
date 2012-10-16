@@ -12,8 +12,8 @@ namespace BlockRTS.Core.GameObjects.Blocks
 
     public class WhiteBlock : BaseBlock
     {
-        public WhiteBlock(IMessageBus bus, Mat4 transformation)
-            : base(bus, transformation,Color.WhiteSmoke)
+        public WhiteBlock(IMessageBus bus, Vect3 position, Quat rotation)
+            : base(bus, position, rotation, Color.WhiteSmoke)
         {
 
         }

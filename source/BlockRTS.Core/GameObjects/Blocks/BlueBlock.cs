@@ -11,8 +11,8 @@ namespace BlockRTS.Core.GameObjects.Blocks
 {
     public class BlueBlock:BaseBlock
     {
-        public BlueBlock(IMessageBus bus, Mat4 transformation)
-            : base(bus, transformation, Color.FromArgb(255, 94, 169, 198))//5EA9C6
+        public BlueBlock(IMessageBus bus, Vect3 position, Quat rotation)
+            : base(bus, position,rotation, Color.FromArgb(255, 94, 169, 198))//5EA9C6
         {
 
         }

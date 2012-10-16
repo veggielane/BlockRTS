@@ -29,7 +29,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Shaders
         }
 
 
-        public void Link()
+        public virtual void Link()
         {
             string info;
             GL.LinkProgram(Handle);

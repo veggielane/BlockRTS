@@ -7,7 +7,9 @@ namespace BlockRTS.Core.Physics
     {
         double Mass { get; }
 
-        Mat4 Transformation { get; }
+        Vect3 Position { get; set; }
+        Quat Rotation { get; set; }
+
         Vect3 Velocity { get; }
 
         void ApplyImpulse();

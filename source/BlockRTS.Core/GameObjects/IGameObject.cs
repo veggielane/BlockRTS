@@ -9,6 +9,8 @@ namespace BlockRTS.Core.GameObjects
     {
         Guid Id { get; }
         void Update(TickTime delta);
-        Mat4 Transformation { get; }
+        //Mat4 Transformation { get; }
+        Vect3 Position { get; }
+        Quat Rotation { get; }
     }
 }

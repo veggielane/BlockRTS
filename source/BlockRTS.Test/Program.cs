@@ -58,9 +58,9 @@ namespace BlockRTS.Test
             _kernal = kernal;
         }
 
-        public IGameObject CreateGameObject(Type gameObjectType, Mat4 transformation)
+        public IGameObject CreateGameObject(Type gameObjectType, Vect3 position, Quat rotation)
         {
-            return (IGameObject)_kernal.Get(gameObjectType, new ConstructorArgument("transformation", transformation));
+            return (IGameObject)_kernal.Get(gameObjectType, new ConstructorArgument("position", position), new ConstructorArgument("rotation", rotation));
         }
 
         public IView CreateView(Type viewType,IGameObject gameObject)

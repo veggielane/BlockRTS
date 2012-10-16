@@ -9,6 +9,7 @@ using BlockRTS.Core.Graphics.OpenGL.Assets;
 using BlockRTS.Core.Graphics.OpenGL.Assets.Textures;
 using BlockRTS.Core.Graphics.OpenGL.Shaders;
 using BlockRTS.Core.Graphics.Shapes;
+using BlockRTS.Core.Maths;
 using OpenTK.Graphics.OpenGL;
 
 namespace BlockRTS.Core.Graphics.OpenGL.Views
@@ -61,7 +62,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
             {
                 foreach (var gameObject in _gameObjects)
                 {
-                    _shader.Uniforms["position"].Data = gameObject.Transformation.ToMatrix4();
+                    _shader.Uniforms["position"].Data = gameObject.Position.ToMat4().ToMatrix4();
                     GL.DrawArrays(_cubevao.VBO.BeginMode, 0, _cubevao.VBO.Count);
                 }
             }
