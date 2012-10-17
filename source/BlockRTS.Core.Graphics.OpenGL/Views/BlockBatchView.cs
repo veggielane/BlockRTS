@@ -14,7 +14,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace BlockRTS.Core.Graphics.OpenGL.Views
 {
-    class BlockBatchView:IBatchView
+    class BlockBatchView : IBatchView
     {
         private readonly IAssetManager _assets;
 
@@ -77,21 +77,26 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
                 -Size, Size, Size,
                 -Size, Size, -Size
             };
-            //_cubevao = new VAO(_shader, new Cube { Color = Color.FromArgb(255, 94, 169, 198) }.ToMesh().ToVBO());
-
 
             GL.GenVertexArrays(1, out _squareVao);
             GL.GenBuffers(1, out _squareVbo);
             GL.BindVertexArray(_squareVao);
             GL.BindBuffer(BufferTarget.ArrayBuffer, _squareVbo);
 
-
             GL.EnableVertexAttribArray(0);
             GL.EnableVertexAttribArray(1);
             GL.EnableVertexAttribArray(2);
+            GL.EnableVertexAttribArray(3);
 
             GL.Arb.VertexAttribDivisor(1, 1);
+            
             GL.Arb.VertexAttribDivisor(2, 1);
+            GL.Arb.VertexAttribDivisor(3, 1);
+
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 11 * sizeof(float), _squareVertices.Length * sizeof(float));
+            GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, 11 * sizeof(float), (_squareVertices.Length + 3) * sizeof(float));
+            GL.VertexAttribPointer(3, 4, VertexAttribPointerType.Float, false, 11 * sizeof(float), (_squareVertices.Length + 3 + 4) * sizeof(float));
 
             Loaded = true;
         }
@@ -101,45 +106,45 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
             throw new NotImplementedException();
         }
 
-        private readonly List<float> _positions = new List<float>();
-        private readonly List<float> _rotations = new List<float>();
         private float[] _squareVertices;
-        private int _count;
+
+        private int _count = 0;
 
         public void Update(double delta)
         {
-            _count = 0;
-            foreach (var o in _gameObjects)
-            {
-                _positions.Add((float)o.Position.X);
-                _positions.Add((float)o.Position.Y);
-                _positions.Add((float)o.Position.Z);
-                _rotations.Add((float)o.Rotation.X);
-                _rotations.Add((float)o.Rotation.Y);
-                _rotations.Add((float)o.Rotation.Z);
-                _rotations.Add((float)o.Rotation.W);
-                _count++;
-            }
+            var objects = _gameObjects.ToArray();
+            _count = objects.Count();
             GL.BindVertexArray(_squareVao);
             GL.BindBuffer(BufferTarget.ArrayBuffer, _squareVbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr((_squareVertices.Length + _count * 3 + _count * 4) * sizeof(float)), IntPtr.Zero, BufferUsageHint.StreamDraw);
-
-
-            GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, new IntPtr(_squareVertices.Length * sizeof(float)), _squareVertices);
-            GL.BufferSubData(BufferTarget.ArrayBuffer, new IntPtr(_squareVertices.Length * sizeof(float)), new IntPtr(_count * 3 * sizeof(float)), _positions.ToArray());
-            GL.BufferSubData(BufferTarget.ArrayBuffer, new IntPtr((_squareVertices.Length + _count * 3) * sizeof(float)), new IntPtr(_count * 4 * sizeof(float)), _rotations.ToArray());
-
-
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
-            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 0, _squareVertices.Length * sizeof(float));
-            GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, 0, (_squareVertices.Length + _count * 3) * sizeof(float));
-
-
-            //_objects.Clear();
-            _rotations.Clear();
-            _positions.Clear();
-
-
+            GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr((_squareVertices.Length + (_count * (3 + 4 + 4))) * sizeof(float)), IntPtr.Zero, BufferUsageHint.StreamDraw);
+            var ptr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.WriteOnly); 
+            unsafe
+            {
+                var videoMemory = (float*) ptr.ToPointer();
+                var i = 0;
+                foreach (var squareVertex in _squareVertices)
+                {
+                    videoMemory[i++] = squareVertex;
+                }
+                foreach (var gameObject in objects)
+                {
+                    //position
+                    videoMemory[i++] = (float)gameObject.Position.X;
+                    videoMemory[i++] = (float)gameObject.Position.Y;
+                    videoMemory[i++] = (float)gameObject.Position.Z;
+                    //rotation
+                    videoMemory[i++] = (float)gameObject.Rotation.X;
+                    videoMemory[i++] = (float)gameObject.Rotation.Y;
+                    videoMemory[i++] = (float)gameObject.Rotation.Z;
+                    videoMemory[i++] = (float)gameObject.Rotation.W;
+                    //color
+                    videoMemory[i++] = 1.0f;
+                    videoMemory[i++] = 1.0f;
+                    videoMemory[i++] = 1.0f;
+                    videoMemory[i++] = 1.0f;
+                }
+            }
+            GL.UnmapBuffer(BufferTarget.ArrayBuffer);
         }
 
         public void Render()

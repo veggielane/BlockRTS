@@ -12,5 +12,6 @@ namespace BlockRTS.Core.GameObjects
         //Mat4 Transformation { get; }
         Vect3 Position { get; }
         Quat Rotation { get; }
+
     }
 }
