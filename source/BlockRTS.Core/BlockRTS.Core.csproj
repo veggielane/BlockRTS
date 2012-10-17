@@ -51,6 +51,7 @@
     <Compile Include="GameObjects\GameObjectFactory.cs" />
     <Compile Include="GameObjects\IGameObject.cs" />
     <Compile Include="GameObjects\IGameObjectFactory.cs" />
+    <Compile Include="GameObjects\Planet.cs" />
     <Compile Include="Graphics\BindViewAttribute.cs" />
     <Compile Include="IObjectCreator.cs" />
     <Compile Include="Graphics\IBatchView.cs" />

@@ -51,7 +51,7 @@ namespace BlockRTS.Core
             Graphics.Start();
             Bus.Add(new DebugMessage(Timer.LastTickTime, "Started Game Engine"));
             var _rand = new Random();
-            var results = Enumerable.Range(0, _rand.Next(1000))
+            var results = Enumerable.Range(0, 5000)
                         .Select(r => new { x = _rand.NextDouble(-20.0, 20.0), y = _rand.NextDouble(-20.0, 20.0), z = _rand.NextDouble(-20.0, 20.0) })
                         .ToList();
             

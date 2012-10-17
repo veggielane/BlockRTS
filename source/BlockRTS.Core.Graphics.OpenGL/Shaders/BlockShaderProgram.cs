@@ -18,19 +18,16 @@ namespace BlockRTS.Core.Graphics.OpenGL.Shaders
 
         public override void Link()
         {
-            string info;
-            GL.LinkProgram(Handle);
-            GL.GetProgramInfoLog(Handle, out info);
-            Console.WriteLine(info);
-
-            ErrorCode err = GL.GetError();
-            if (err != ErrorCode.NoError)
-                Console.WriteLine("Error at Shader: " + err);
+            GL.BindAttribLocation(Handle, 0, "position");
+            GL.BindAttribLocation(Handle, 1, "instance_position");
+            GL.BindAttribLocation(Handle, 2, "instance_rotation");
+            base.Link();
         }
 
 
         public override void AddUniforms()
         {
+
             Uniforms.Add("mvp",new UniformMatrix4("mvp",this));
             Uniforms.Add("position",new UniformMatrix4("position",this));
         }
@@ -41,29 +38,23 @@ namespace BlockRTS.Core.Graphics.OpenGL.Shaders
             {
                 get
                 {
-                    return @"#version 150 
-precision highp float; 
- 
-layout (location = 0) in vec3 vert_position; 
-layout (location = 1) in vec3 vert_normal; 
-layout (location = 2) in vec4 vert_colour; 
-layout (location = 3) in vec2 vert_texture;
+                    return @"#version 330
+precision highp float;
 
-
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec3 instance_position;
+layout (location = 2) in vec4 instance_rotation;
 uniform mat4 mvp;
-uniform mat4 position; 
 
-varying vec3 normal; 
-varying vec4 colour; 
-varying vec2 texcoord;
+vec3 qrot(vec4 q, vec3 v)       {
+        return v + 2.0*cross(q.xyz, cross(q.xyz,v) + q.w*v);
+}
 
-void main(void) 
-{ 
-  normal = (mvp * vec4(vert_normal, 0)).xyz; //works only for orthogonal modelview 
-  colour = vert_colour; 
-  texcoord = vert_texture;
-  gl_Position = mvp * position * vec4(vert_position, 1); 
-}";
+void main(void)
+{
+    gl_Position = mvp * vec4(instance_position + qrot(instance_rotation,position) , 1.0);
+}
+";
                 }
             }
         }
@@ -74,32 +65,11 @@ void main(void)
             {
                 get
                 {
-                    return @"#version 150 
+                    return @"#version 330
 precision highp float;
-
-const vec3 ambient = vec3(0.8, 0.8, 0.8);
-const vec3 lightVecNormalized = normalize(vec3(0.5, 1, 2.0));
-const vec3 lightColor = vec3(0.9, 0.9, 0.9);
-
-varying vec3 normal;
-varying vec4 colour;
-varying vec2 texcoord;
-
-uniform sampler2D tex;
-
-out vec4 out_frag_color;
 void main(void)
 {
-  if(colour == vec4(0.0,0.0,0.0,0.0)){
-      out_frag_color = texture2D(tex, texcoord);
-  }else{
-      out_frag_color = colour * texture2D(tex, texcoord);
-  }
-
-	//if (out_frag_color.a < 0.4)// alpha value less than user-specified threshold?
-	//{
-	//	discard; // yes: discard this fragment
-	//}
+    gl_FragColor = vec4(0.37,0.66,0.78,0.9);
 }";
                 }
             }

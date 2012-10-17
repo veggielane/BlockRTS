@@ -42,7 +42,7 @@ namespace BlockRTS.Core.Graphics.OpenGL
             _camera.Model = Mat4.Translate(0f, 0f, 0.0f);
             _camera.Eye = new Vect3(0.0f, 0.0f, 100.0f);
             _camera.Projection = Mat4.CreatePerspectiveFieldOfView(Math.PI / 4.0, Width / (float)Height, 1, 512);
-            VSync = VSyncMode.Off;
+            VSync = VSyncMode.On;
             
         }
 
@@ -103,6 +103,11 @@ namespace BlockRTS.Core.Graphics.OpenGL
                 _shader.Uniforms["mvp"].Data = _camera.MVP.ToMatrix4();
                 _shader.Uniforms["position"].Data = Matrix4.Identity;
             }
+
+            using (new Bind(_assetManager.Shader<BlockShaderProgram>()))
+            {
+                _assetManager.Shader<BlockShaderProgram>().Uniforms["mvp"].Data = _camera.MVP.ToMatrix4();
+            }
         }
 
         private bool _wireframe;
@@ -127,10 +132,6 @@ namespace BlockRTS.Core.Graphics.OpenGL
                 _shader.Uniforms["position"].Data = Matrix4.Identity;
                 GL.DrawArrays(BeginMode.Lines, 0, _vbo.Count);
             }
-
-
-
-
 
             SwapBuffers();
             ErrorCode err = GL.GetError();
