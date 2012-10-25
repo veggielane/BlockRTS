@@ -44,6 +44,12 @@ namespace BlockRTS.Core.Maths
             get { return new Angle(); }
         }
 
+        public static Angle TwoPI
+        {
+            get { return new Angle(); }
+        }
+
+
         public static Angle operator +(Angle a1, Angle a2)
         {
             return new Angle(a1.Radians + a2.Radians);
@@ -63,10 +69,12 @@ namespace BlockRTS.Core.Maths
         {
             return new Angle(a.Radians / d);
         }
+        /*
         public static implicit operator Angle(double radians)
         {
             return new Angle(radians);
         }
+         */ 
         public static implicit operator double(Angle angle)
         {
             return angle.Radians;

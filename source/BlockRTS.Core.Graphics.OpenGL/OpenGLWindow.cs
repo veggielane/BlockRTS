@@ -29,7 +29,6 @@ namespace BlockRTS.Core.Graphics.OpenGL
         private readonly IViewManager _viewManager;
         private readonly IAssetManager _assetManager;
 
-
         public OpenGLWindow(IMessageBus bus, IObservableTimer timer, ICamera camera, IViewManager viewManager,
                             IAssetManager assetManager)
             : base(1280, 720, new GraphicsMode(32, 0, 0, 4), "Test")
@@ -40,20 +39,11 @@ namespace BlockRTS.Core.Graphics.OpenGL
             _viewManager = viewManager;
             _assetManager = assetManager;
             _camera.Model = Mat4.Translate(0f, 0f, 0.0f);
-            _camera.Eye = new Vect3(0.0f, 0.0f, 100.0f);
+            _camera.Eye = new Vect3(0.0f, 0.0f, 80.0f);
             _camera.Projection = Mat4.CreatePerspectiveFieldOfView(Math.PI / 4.0, Width / (float)Height, 1, 512);
             VSync = VSyncMode.On;
             
         }
-
-        //private IShaderProgram _test;
-
-
-
-        private VBO _vbo;
-        private VAO _vao;
-
-
 
         private IShaderProgram _shader;
 
@@ -70,18 +60,6 @@ namespace BlockRTS.Core.Graphics.OpenGL
             _shader = _assetManager.Shader<DefaultShaderProgram>();
 
             _viewManager.Load();
-
-            _vbo = new VBO();
-            var data = new List<OpenGLVertex>();
-            float asize = 10f;
-            data.Add(new OpenGLVertex {Position = new Vector3(0, 0, 0), Colour = Color.Blue.ToVector4()});
-            data.Add(new OpenGLVertex {Position = new Vector3(asize, 0, 0), Colour = Color.Blue.ToVector4()});
-            data.Add(new OpenGLVertex {Position = new Vector3(0, 0, 0), Colour = Color.Red.ToVector4()});
-            data.Add(new OpenGLVertex {Position = new Vector3(0, asize, 0), Colour = Color.Red.ToVector4()});
-            data.Add(new OpenGLVertex {Position = new Vector3(0, 0, 0), Colour = Color.Green.ToVector4()});
-            data.Add(new OpenGLVertex {Position = new Vector3(0, 0, asize), Colour = Color.Green.ToVector4()});
-            _vbo.Buffer(data);
-            _vao = new VAO(_shader, _vbo);
 
             Bus.Add(new DebugMessage(Timer.LastTickTime, "Loaded OpenGL Window"));
             var err = GL.GetError();
@@ -125,19 +103,11 @@ namespace BlockRTS.Core.Graphics.OpenGL
 
             _viewManager.Render();
 
-            using (Bind.Asset(_shader))
-            using (Bind.Asset(_assetManager.Texture<DefaultTexture>()))
-            using (new Bind(_vao))
-            {
-                _shader.Uniforms["position"].Data = Matrix4.Identity;
-                GL.DrawArrays(BeginMode.Lines, 0, _vbo.Count);
-            }
-
             SwapBuffers();
             ErrorCode err = GL.GetError();
             if (err != ErrorCode.NoError)
                 Console.WriteLine("Error at Swapbuffers: " + err.ToString());
-            Title =" FPS: " + string.Format("{0:F}", 1.0 / e.Time);
+            //Title =" FPS: " + string.Format("{0:F}", 1.0 / e.Time);
         }
 
         protected override void OnResize(EventArgs e)
@@ -145,7 +115,6 @@ namespace BlockRTS.Core.Graphics.OpenGL
             GL.Viewport(0, 0, Width, Height);
             Bus.Add(new DebugMessage(Timer.LastTickTime, "Window Resize"));
             _camera.Projection = Mat4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, Width/(float) Height, 0.1f, 512.0f);
-
         }
 
         protected override void OnClosed(EventArgs e)

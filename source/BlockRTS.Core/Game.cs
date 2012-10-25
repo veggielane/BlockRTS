@@ -50,8 +50,14 @@ namespace BlockRTS.Core
             Timer.Start();
             Graphics.Start();
             Bus.Add(new DebugMessage(Timer.LastTickTime, "Started Game Engine"));
+
+
+
+            Bus.Add(GameObjectRequest.Create<WhiteBlock>(Timer.LastTickTime, Vect3.Zero, Quat.Identity));
+
+            /*
             var _rand = new Random();
-            var results = Enumerable.Range(0, 5000)
+            var results = Enumerable.Range(0, 100)
                         .Select(r => new { x = _rand.NextDouble(-20.0, 20.0), y = _rand.NextDouble(-20.0, 20.0), z = _rand.NextDouble(-20.0, 20.0) })
                         .ToList();
             
@@ -66,7 +72,7 @@ namespace BlockRTS.Core
                 }
             }
 
-            Bus.Add(GameObjectRequest.Create<WhiteBlock>(Timer.LastTickTime,  Vect3.Zero, Quat.Identity));
+            Bus.Add(GameObjectRequest.Create<WhiteBlock>(Timer.LastTickTime,  Vect3.Zero, Quat.Identity));*/
         }
 
         public void Stop()

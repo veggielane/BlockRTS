@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BlockRTS.Core.GameObjects;
+using BlockRTS.Core.Graphics.Models;
 using BlockRTS.Core.Graphics.OpenGL.Assets;
 using BlockRTS.Core.Graphics.OpenGL.Assets.Textures;
 using BlockRTS.Core.Graphics.OpenGL.Shaders;
@@ -45,6 +46,23 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
         public void Load()
         {
             _shader = _assets.Shader<BlockShaderProgram>();
+
+
+            STL stl = new STL("chamfer_cube.stl", Color.Yellow);
+            var verts = new List<float>();
+            var mesh = stl.ToMesh();
+
+            foreach (var vertex in mesh.Vertices)
+            {
+                verts.Add((float)vertex.Position.X);
+                verts.Add((float)vertex.Position.Y);
+                verts.Add((float)vertex.Position.Z);
+
+
+            }
+
+            _squareVertices = verts.ToArray();
+            /*
             _squareVertices = new[]{
                 //Front Face
                 -Size, -Size, Size,
@@ -76,8 +94,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
                 -Size, -Size, Size,
                 -Size, Size, Size,
                 -Size, Size, -Size
-            };
-
+            };*/
             GL.GenVertexArrays(1, out _squareVao);
             GL.GenBuffers(1, out _squareVbo);
             GL.BindVertexArray(_squareVao);
@@ -112,8 +129,8 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
 
         public void Update(double delta)
         {
-            var objects = _gameObjects.ToArray();
-            _count = objects.Count();
+            //var objects = _gameObjects.ToArray();
+            _count = _gameObjects.Count();
             GL.BindVertexArray(_squareVao);
             GL.BindBuffer(BufferTarget.ArrayBuffer, _squareVbo);
             GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr((_squareVertices.Length + (_count * (3 + 4 + 4))) * sizeof(float)), IntPtr.Zero, BufferUsageHint.StreamDraw);
@@ -126,7 +143,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
                 {
                     videoMemory[i++] = squareVertex;
                 }
-                foreach (var gameObject in objects)
+                foreach (var gameObject in _gameObjects)
                 {
                     //position
                     videoMemory[i++] = (float)gameObject.Position.X;
@@ -152,7 +169,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
             using (Bind.Asset(_shader))
             {
                 GL.BindVertexArray(_squareVao);
-                GL.DrawArraysInstanced(BeginMode.Quads, 0, 24, _count);
+                GL.DrawArraysInstanced(BeginMode.Triangles, 0, _squareVertices.Count()/3, _count);
             }
         }
     }

@@ -18,7 +18,7 @@ namespace BlockRTS.Core.Physics
             Rotation = rotation;
 
             var rnd = new Random();
-            Velocity = new Vect3(rnd.NextDouble(-5, 5), rnd.NextDouble(-5, 5), rnd.NextDouble(-5, 5));
+            Velocity = new Vect3(rnd.NextDouble(-5.0, 5.0), rnd.NextDouble(-5.0, 5.0), rnd.NextDouble(-5.0, 5.0));
         }
 
         public void ApplyImpulse()
@@ -26,9 +26,14 @@ namespace BlockRTS.Core.Physics
 
         }
 
+
+        private Random _random = new Random();
         public void Update(TickTime delta)
         {
             Position = Position + (Velocity * delta.GameTimeDelta.TotalSeconds);
+
+
+            Rotation *= new Euler(Angle.FromDegrees(_random.Next(10) * delta.GameTimeDelta.TotalSeconds), Angle.FromDegrees(_random.Next(10) * delta.GameTimeDelta.TotalSeconds), Angle.FromDegrees(_random.Next(10) * delta.GameTimeDelta.TotalSeconds)).ToQuat();
         }
     }
 }
