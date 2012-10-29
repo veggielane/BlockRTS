@@ -1,4 +1,4 @@
-namespace BlockRTS.Core.Graphics.OpenGL.Shaders
+namespace BlockRTS.Core.Graphics.OpenGL
 {
     public interface IAsset
     {

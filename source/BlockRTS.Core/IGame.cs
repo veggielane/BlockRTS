@@ -12,6 +12,6 @@ namespace BlockRTS.Core
         void Stop();
 
         IGraphics Graphics { get; }
-        IObservableTimer Timer { get; }
+        ITimer Timer { get; }
     }
 }

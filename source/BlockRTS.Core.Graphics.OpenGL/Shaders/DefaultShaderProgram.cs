@@ -30,14 +30,12 @@ layout (location = 1) in vec3 vert_normal;
 layout (location = 2) in vec4 vert_colour; 
 layout (location = 3) in vec2 vert_texture;
 
-
 uniform mat4 mvp;
 uniform mat4 position; 
 
-varying vec3 normal; 
-varying vec4 colour; 
-varying vec2 texcoord;
-
+out vec3 normal; 
+out vec4 colour; 
+out vec2 texcoord;
 void main(void) 
 { 
   normal = (mvp * vec4(vert_normal, 0)).xyz; //works only for orthogonal modelview 
@@ -58,29 +56,30 @@ void main(void)
                     return @"#version 150 
 precision highp float;
 
-const vec3 ambient = vec3(0.8, 0.8, 0.8);
+const vec3 ambient = vec3(0.5, 0.5, 0.5);
 const vec3 lightVecNormalized = normalize(vec3(0.5, 1, 2.0));
 const vec3 lightColor = vec3(0.9, 0.9, 0.9);
 
-varying vec3 normal;
-varying vec4 colour;
-varying vec2 texcoord;
+in vec3 normal;
+in vec4 colour;
+in vec2 texcoord;
 
 uniform sampler2D tex;
 
-out vec4 out_frag_color;
+layout( location = 0 ) out vec4 FragColor;
+
 void main(void)
 {
-  if(colour == vec4(0.0,0.0,0.0,0.0)){
-      out_frag_color = texture2D(tex, texcoord);
-  }else{
-      out_frag_color = colour * texture2D(tex, texcoord);
-  }
+  float diffuse = clamp(dot(lightVecNormalized, normalize(normal)), 0.0, 1.0);
+  FragColor = colour * vec4(ambient + diffuse * lightColor, 1.0);
+  //out_frag_color = texture2D(tex, texcoord) * vec4(ambient + diffuse * lightColor, 1.0);
 
-	//if (out_frag_color.a < 0.4)// alpha value less than user-specified threshold?
-	//{
-	//	discard; // yes: discard this fragment
-	//}
+
+  if(colour == vec4(0.0,0.0,0.0,0.0)){
+     // FragColor = texture2D(tex, texcoord);
+  }else{
+     // FragColor = colour * texture2D(tex, texcoord);
+  }
 }";
                 }
             }

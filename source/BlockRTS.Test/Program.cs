@@ -38,7 +38,7 @@ namespace BlockRTS.Test
             Bind<IGame>().To<Game>().InSingletonScope();
             Bind<IMessageBus>().To<MessageBus>().InSingletonScope();
             Bind<IGraphics>().To<OpenGLGraphics>().InSingletonScope();
-            Bind<IObservableTimer>().To<AsyncObservableTimer>().InSingletonScope();
+            Bind<ITimer>().To<AsyncTimer>().InSingletonScope();
             Bind<IGameObjectFactory>().To<GameObjectFactory>().InSingletonScope();
             Bind<IObjectCreator>().To<NinjectObjectCreator>().InSingletonScope();
 

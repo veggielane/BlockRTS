@@ -9,7 +9,6 @@ using BlockRTS.Core.Graphics.OpenGL.Assets;
 using BlockRTS.Core.Graphics.OpenGL.Assets.Textures;
 using BlockRTS.Core.Graphics.OpenGL.Shaders;
 using BlockRTS.Core.Graphics.OpenGL.Vertices;
-using BlockRTS.Core.Graphics.Shapes;
 using BlockRTS.Core.Maths;
 using BlockRTS.Core.Messaging;
 using BlockRTS.Core.Messaging.Messages;
@@ -24,12 +23,12 @@ namespace BlockRTS.Core.Graphics.OpenGL
     public class OpenGLWindow : GameWindow
     {
         public IMessageBus Bus { get; set; }
-        public IObservableTimer Timer { get; set; }
+        public ITimer Timer { get; set; }
         private readonly ICamera _camera;
         private readonly IViewManager _viewManager;
         private readonly IAssetManager _assetManager;
 
-        public OpenGLWindow(IMessageBus bus, IObservableTimer timer, ICamera camera, IViewManager viewManager,
+        public OpenGLWindow(IMessageBus bus, ITimer timer, ICamera camera, IViewManager viewManager,
                             IAssetManager assetManager)
             : base(1280, 720, new GraphicsMode(32, 0, 0, 4), "Test")
         {

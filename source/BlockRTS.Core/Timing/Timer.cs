@@ -8,13 +8,13 @@ using BlockRTS.Core.Reactive;
 
 namespace BlockRTS.Core.Timing
 {
-    public class ObservableTimer : Observable<TickTime>, IObservableTimer
+    public class Timer : Observable<TickTime>, ITimer
     {
         public TimeSpan TickDelta { get; set; }
         public TimerState State { get; private set; }
         public TickTime LastTickTime { get; private set; }
 
-        public ObservableTimer()
+        public Timer()
         {
             TickDelta = TimeSpan.FromMilliseconds(1);
             State = TimerState.Stopped;

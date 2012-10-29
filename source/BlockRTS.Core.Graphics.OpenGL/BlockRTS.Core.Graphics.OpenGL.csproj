@@ -59,7 +59,7 @@
     <Compile Include="Shaders\BaseShaderProgram.cs" />
     <Compile Include="Shaders\BlockShaderProgram.cs" />
     <Compile Include="Shaders\DefaultShaderProgram.cs" />
-    <Compile Include="Shaders\IAsset.cs" />
+    <Compile Include="IAsset.cs" />
     <Compile Include="Shaders\IShader.cs" />
     <Compile Include="Shaders\IShaderProgram.cs" />
     <Compile Include="Assets\Textures\Texture.cs" />
@@ -69,12 +69,16 @@
     <Compile Include="Vertices\OpenGLVertex.cs" />
     <Compile Include="Views\BlockBatchView.cs" />
     <Compile Include="Views\BlockView.cs" />
+    <Compile Include="Views\ExplosionView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BlockRTS.Core\BlockRTS.Core.csproj">
       <Project>{2a73ad22-812d-4d38-9904-b6abc2002445}</Project>
       <Name>BlockRTS.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Shaders\UBO\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BlockRTS.Core.Timing
 {
-    public class AsyncObservableTimer : ObservableTimer
+    public class AsyncTimer : Timer
     {
         private Task RunningTask { get; set; }
         public override void Start()

@@ -2,7 +2,7 @@
 
 namespace BlockRTS.Core.Timing
 {
-    public interface IObservableTimer : IObservable<TickTime>
+    public interface ITimer : IObservable<TickTime>
     {
         TimeSpan TickDelta { get; set; }
         TimerState State { get; }

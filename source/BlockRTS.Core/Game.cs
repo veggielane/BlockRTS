@@ -17,7 +17,7 @@ namespace BlockRTS.Core
     public class Game:IGame
     {
         public IMessageBus Bus { get; private set; }
-        public IObservableTimer Timer { get; private set; }
+        public ITimer Timer { get; private set; }
  
 
         public IGraphics Graphics { get; private set; }
@@ -25,7 +25,7 @@ namespace BlockRTS.Core
 
         public bool Running { get; private set; }
 
-        public Game(IObservableTimer timer, IGraphics graphics, IMessageBus bus, IGameObjectFactory factory)
+        public Game(ITimer timer, IGraphics graphics, IMessageBus bus, IGameObjectFactory factory)
         {
             Timer = timer;
             Timer.SubSample(5).Subscribe(t => Bus.SendAll());
@@ -50,10 +50,23 @@ namespace BlockRTS.Core
             Timer.Start();
             Graphics.Start();
             Bus.Add(new DebugMessage(Timer.LastTickTime, "Started Game Engine"));
-
-
-
+            var xvalues = Enumerable.Range(-5, 10).Select(i => i * 2);
+            var yvalues = Enumerable.Range(-5, 10).Select(i => i * 2);
+            var zvalues = Enumerable.Range(-5, 10).Select(i => i * 2);
+            //foreach (var x in xvalues)
+            //{
+            //    foreach (var y in yvalues)
+            //    {
+            //        foreach (var z in zvalues)
+            //        {
+            //            Bus.Add(GameObjectRequest.Create<BlueBlock>(Timer.LastTickTime, new Vect3(x, y, z), Quat.Identity));
+            //        }
+            //    }
+            //}
             Bus.Add(GameObjectRequest.Create<WhiteBlock>(Timer.LastTickTime, Vect3.Zero, Quat.Identity));
+            Bus.Add(GameObjectRequest.Create<WhiteBlock>(Timer.LastTickTime, new Vect3(10,10,10), Quat.Identity));
+
+            Bus.Add(GameObjectRequest.Create<Explosion>(Timer.LastTickTime, new Vect3(0, 0, 0), Quat.Identity));
 
             /*
             var _rand = new Random();

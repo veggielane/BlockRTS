@@ -9,7 +9,6 @@ using BlockRTS.Core.GameObjects.Blocks;
 using BlockRTS.Core.Graphics.OpenGL.Assets;
 using BlockRTS.Core.Graphics.OpenGL.Assets.Textures;
 using BlockRTS.Core.Graphics.OpenGL.Shaders;
-using BlockRTS.Core.Graphics.Shapes;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 

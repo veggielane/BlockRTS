@@ -12,12 +12,12 @@ namespace BlockRTS.Core.Graphics.OpenGL
     public class OpenGLGraphics:IGraphics
     {
         private readonly IMessageBus _bus;
-        private readonly IObservableTimer _timer;
+        private readonly ITimer _timer;
         private readonly ICamera _camera;
         private readonly IViewManager _viewManager;
         private readonly IAssetManager _assetManager;
        // private readonly OpenGLWindow _window;
-        public OpenGLGraphics(IMessageBus bus, IObservableTimer timer, ICamera camera, IViewManager viewManager, IAssetManager assetManager)
+        public OpenGLGraphics(IMessageBus bus, ITimer timer, ICamera camera, IViewManager viewManager, IAssetManager assetManager)
         {
             _bus = bus;
             _timer = timer;

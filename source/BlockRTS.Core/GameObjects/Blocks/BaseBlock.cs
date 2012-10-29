@@ -4,6 +4,7 @@ using BlockRTS.Core.GameObjects;
 using BlockRTS.Core.Maths;
 using BlockRTS.Core.Messaging;
 using BlockRTS.Core.Physics;
+using BlockRTS.Core.Physics.Bodys;
 using BlockRTS.Core.Timing;
 
 namespace BlockRTS.Core.GameObjects.Blocks
