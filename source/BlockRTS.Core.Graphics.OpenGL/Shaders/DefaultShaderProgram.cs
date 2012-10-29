@@ -22,7 +22,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Shaders
             {
                 get
                 {
-                    return @"#version 150 
+                    return @"#version 400
 precision highp float; 
  
 layout (location = 0) in vec3 vert_position; 
@@ -53,7 +53,7 @@ void main(void)
             {
                 get
                 {
-                    return @"#version 150 
+                    return @"#version 400
 precision highp float;
 
 const vec3 ambient = vec3(0.5, 0.5, 0.5);
