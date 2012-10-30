@@ -10,12 +10,13 @@ namespace BlockRTS.Core.Graphics.OpenGL.Shaders
     public interface IShaderProgram:IAsset
     {
         int Handle { get; }
-        void Link();
-        void AddShader(IShader shader);
+        //void Link();
+        //void AddShader(IShader shader);
         IDictionary<string,IUniform> Uniforms { get; }
-        void AddUniforms();
+        //void AddUniforms();
     }
 
+    
     public interface IUniform
     {
         int Handle { get; }

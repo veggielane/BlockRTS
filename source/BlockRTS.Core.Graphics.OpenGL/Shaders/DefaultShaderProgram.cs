@@ -1,28 +1,14 @@
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace BlockRTS.Core.Graphics.OpenGL.Shaders
 {
-    public class DefaultOldShaderProgram : BaseShaderProgram
+
+    public class DefaultShaderProgram:BaseShaderProgram
     {
-        public DefaultOldShaderProgram()
+        public DefaultShaderProgram()
         {
-            AddShader(new TestBaseVertexBaseShader());
-            AddShader(new TestBaseFragmentBaseShader());
-        }
-
-        public override void AddUniforms()
-        {
-            Uniforms.Add("mvp",new UniformMatrix4("mvp",this));
-            Uniforms.Add("position",new UniformMatrix4("position",this));
-        }
-
-        public class TestBaseVertexBaseShader : BaseVertexBaseShader
-        {
-            public override string Source
-            {
-                get
-                {
-                    return @"#version 400
+            CompileShader(ShaderType.VertexShader, @"#version 400
 precision highp float; 
  
 layout (location = 0) in vec3 vert_position; 
@@ -42,18 +28,9 @@ void main(void)
   colour = vert_colour; 
   texcoord = vert_texture;
   gl_Position = mvp * position * vec4(vert_position, 1); 
-}";
-                }
-            }
-        }
+}");
 
-        public class TestBaseFragmentBaseShader : BaseFragmentBaseShader
-        {
-            public override string Source
-            {
-                get
-                {
-                    return @"#version 400
+            CompileShader(ShaderType.FragmentShader, @"#version 400
 precision highp float;
 
 const vec3 ambient = vec3(0.5, 0.5, 0.5);
@@ -80,9 +57,13 @@ void main(void)
   }else{
      // FragColor = colour * texture2D(tex, texcoord);
   }
-}";
-                }
-            }
+}");
+            GL.BindAttribLocation(Handle, 0, "position");
+            GL.BindAttribLocation(Handle, 1, "instance_position");
+            GL.BindAttribLocation(Handle, 2, "instance_rotation");
+            Link();
+            Uniforms.Add("mvp", new UniformMatrix4("mvp", this));
+            Uniforms.Add("position", new UniformMatrix4("position", this));
         }
     }
 }

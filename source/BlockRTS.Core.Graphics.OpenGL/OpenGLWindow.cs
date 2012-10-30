@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BlockRTS.Core.Graphics.OpenGL.Assets;
-using BlockRTS.Core.Graphics.OpenGL.Assets.Textures;
 using BlockRTS.Core.Graphics.OpenGL.Shaders;
-using BlockRTS.Core.Graphics.OpenGL.Vertices;
 using BlockRTS.Core.Maths;
 using BlockRTS.Core.Messaging;
 using BlockRTS.Core.Messaging.Messages;
@@ -56,7 +48,7 @@ namespace BlockRTS.Core.Graphics.OpenGL
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
             _assetManager.Load();
-            _shader = _assetManager.Shader<DefaultOldShaderProgram>();
+            _shader = _assetManager.Shader<DefaultShaderProgram>();
 
             _viewManager.Load();
 

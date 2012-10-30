@@ -40,8 +40,8 @@ namespace BlockRTS.Core.Graphics.OpenGL.Assets
                 var inst = Activator.CreateInstance(shadertype) as IShaderProgram;
                 if (inst != null)
                 {
-                    inst.Link();
-                    inst.AddUniforms();
+                 //   inst.Link();
+                  //  inst.AddUniforms();
                     _shaderPrograms.Add(shadertype, inst);
                 }
             }
@@ -62,8 +62,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Assets
                 program = _shaderPrograms[typeof (T)];
             }else
             {
-                program = new DefaultOldShaderProgram();
-                program.AddUniforms();
+                program = new DefaultShaderProgram();
             }
             return program;
         }

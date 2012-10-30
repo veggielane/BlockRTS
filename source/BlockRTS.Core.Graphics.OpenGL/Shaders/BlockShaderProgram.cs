@@ -7,38 +7,12 @@ using OpenTK.Graphics.OpenGL;
 
 namespace BlockRTS.Core.Graphics.OpenGL.Shaders
 {
+
     public class BlockShaderProgram : BaseShaderProgram
     {
         public BlockShaderProgram()
         {
-            AddShader(new BlockVertexShader());
-            AddShader(new BlockFragmentShader());
-        }
-
-
-        public override void Link()
-        {
-            GL.BindAttribLocation(Handle, 0, "position");
-            GL.BindAttribLocation(Handle, 1, "instance_position");
-            GL.BindAttribLocation(Handle, 2, "instance_rotation");
-            base.Link();
-        }
-
-
-        public override void AddUniforms()
-        {
-
-            Uniforms.Add("mvp",new UniformMatrix4("mvp",this));
-            Uniforms.Add("position",new UniformMatrix4("position",this));
-        }
-
-        public class BlockVertexShader : BaseVertexBaseShader
-        {
-            public override string Source
-            {
-                get
-                {
-                    return @"#version 330
+            CompileShader(ShaderType.VertexShader, @"#version 400
 precision highp float;
 
 layout (location = 0) in vec3 position;
@@ -54,26 +28,23 @@ void main(void)
 {
     gl_Position = mvp * vec4(instance_position + qrot(instance_rotation,position) , 1.0);
 }
-";
-                }
-            }
-        }
+");
 
-        public class BlockFragmentShader : BaseFragmentBaseShader
-        {
-            public override string Source
-            {
-                get
-                {
-                    return @"#version 330
+            CompileShader(ShaderType.FragmentShader, @"#version 400
 precision highp float;
+layout( location = 0 ) out vec4 FragColor;
 void main(void)
 {
-    gl_FragColor = vec4(0.37,0.66,0.78,0.9);
-}";
-                }
-            }
+    FragColor = vec4(0.37,0.66,0.78,0.9);
+}");
+
+            GL.BindAttribLocation(Handle, 0, "position");
+            GL.BindAttribLocation(Handle, 1, "instance_position");
+            GL.BindAttribLocation(Handle, 2, "instance_rotation");
+            Link();
+            Uniforms.Add("mvp", new UniformMatrix4("mvp", this));
+            Uniforms.Add("position", new UniformMatrix4("position", this));
+
         }
     }
-
 }
