@@ -62,7 +62,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Assets
                 program = _shaderPrograms[typeof (T)];
             }else
             {
-                program = new DefaultShaderProgram();
+                program = new DefaultOldShaderProgram();
                 program.AddUniforms();
             }
             return program;

@@ -2,9 +2,9 @@ using OpenTK;
 
 namespace BlockRTS.Core.Graphics.OpenGL.Shaders
 {
-    public class DefaultShaderProgram : BaseShaderProgram
+    public class DefaultOldShaderProgram : BaseShaderProgram
     {
-        public DefaultShaderProgram()
+        public DefaultOldShaderProgram()
         {
             AddShader(new TestBaseVertexBaseShader());
             AddShader(new TestBaseFragmentBaseShader());

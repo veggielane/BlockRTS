@@ -56,7 +56,7 @@ namespace BlockRTS.Core.Graphics.OpenGL
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
             _assetManager.Load();
-            _shader = _assetManager.Shader<DefaultShaderProgram>();
+            _shader = _assetManager.Shader<DefaultOldShaderProgram>();
 
             _viewManager.Load();
 
