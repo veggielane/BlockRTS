@@ -10,12 +10,13 @@ namespace BlockRTS.Core.Graphics.OpenGL.Shaders
     public interface IShaderProgram:IAsset
     {
         int Handle { get; }
+
+        //void Compile();
         //void Link();
         //void AddShader(IShader shader);
         IDictionary<string,IUniform> Uniforms { get; }
         //void AddUniforms();
     }
-
     
     public interface IUniform
     {
@@ -28,7 +29,6 @@ namespace BlockRTS.Core.Graphics.OpenGL.Shaders
     {
         new T Data { set; }
     }
-
 
     public class UniformMatrix4:IUniform<Matrix4>
 

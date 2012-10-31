@@ -67,15 +67,14 @@ namespace BlockRTS.Core.Graphics.OpenGL
             }
 
             _viewManager.Update(e.Time);
+
+
+            _assetManager.UBO<CameraUBO>().Update(_camera);
+
+
             using (new Bind(_shader))
             {
-                _shader.Uniforms["mvp"].Data = _camera.MVP.ToMatrix4();
                 _shader.Uniforms["position"].Data = Matrix4.Identity;
-            }
-
-            using (new Bind(_assetManager.Shader<BlockShaderProgram>()))
-            {
-                _assetManager.Shader<BlockShaderProgram>().Uniforms["mvp"].Data = _camera.MVP.ToMatrix4();
             }
         }
 
@@ -105,7 +104,13 @@ namespace BlockRTS.Core.Graphics.OpenGL
         {
             GL.Viewport(0, 0, Width, Height);
             Bus.Add(new DebugMessage(Timer.LastTickTime, "Window Resize"));
+
+
             _camera.Projection = Mat4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, Width/(float) Height, 0.1f, 512.0f);
+
+
+
+
         }
 
         protected override void OnClosed(EventArgs e)

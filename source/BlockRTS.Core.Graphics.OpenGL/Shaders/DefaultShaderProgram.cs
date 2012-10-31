@@ -1,3 +1,4 @@
+using BlockRTS.Core.Graphics.OpenGL.Assets;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -6,17 +7,23 @@ namespace BlockRTS.Core.Graphics.OpenGL.Shaders
 
     public class DefaultShaderProgram:BaseShaderProgram
     {
-        public DefaultShaderProgram()
+        private readonly IAssetManager _assetManager;
+
+        public DefaultShaderProgram(IAssetManager assetManager)
         {
+            _assetManager = assetManager;
             CompileShader(ShaderType.VertexShader, @"#version 400
 precision highp float; 
  
+layout(std140) uniform Camera {
+    mat4 mvp;
+};
+
 layout (location = 0) in vec3 vert_position; 
 layout (location = 1) in vec3 vert_normal; 
 layout (location = 2) in vec4 vert_colour; 
 layout (location = 3) in vec2 vert_texture;
 
-uniform mat4 mvp;
 uniform mat4 position; 
 
 out vec3 normal; 
@@ -62,8 +69,9 @@ void main(void)
             GL.BindAttribLocation(Handle, 1, "instance_position");
             GL.BindAttribLocation(Handle, 2, "instance_rotation");
             Link();
-            Uniforms.Add("mvp", new UniformMatrix4("mvp", this));
             Uniforms.Add("position", new UniformMatrix4("position", this));
+            _assetManager.UBO<CameraUBO>().BindToShaderProgram(this);
+
         }
     }
 }

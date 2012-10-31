@@ -72,5 +72,20 @@ namespace BlockRTS.Test
         {
             return (IBatchView)_kernal.Get(viewType);
         }
+
+        public T Create<T>()
+        {
+            return _kernal.Get<T>();
+        }
+
+        public T Create<T>(Type type)
+        {
+            return (T)_kernal.Get(type);
+        }
+
+        public object Create(Type type)
+        {
+            return _kernal.Get(type);
+        }
     }
 }

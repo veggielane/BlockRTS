@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Assets\AssetManager.cs" />
     <Compile Include="Assets\Bind.cs" />
+    <Compile Include="Assets\IAssetManager.cs" />
     <Compile Include="Assets\Textures\DefaultTexture.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="OpenGLGraphics.cs" />

@@ -10,6 +10,10 @@ namespace BlockRTS.Core
         IGameObject CreateGameObject(Type gameObjectType, Vect3 position, Quat rotation);
         IView CreateView(Type viewType, IGameObject gameObject);
         IBatchView CreateBatchView(Type viewType);
-       // void Bind(Type )
+
+        T Create<T>();
+        T Create<T>(Type type);
+        object Create(Type type);
+        // void Bind(Type )
     }
 }

@@ -12,7 +12,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Assets
     {
         private readonly Dictionary<Type,ITexture> _textures = new Dictionary<Type, ITexture>();
         private readonly Dictionary<Type, IShaderProgram> _shaderPrograms = new Dictionary<Type, IShaderProgram>();
-
+        private readonly Dictionary<Type, IUBO> _ubos = new Dictionary<Type, IUBO>();
 
         private IObjectCreator _objectCreator;
 
@@ -24,6 +24,16 @@ namespace BlockRTS.Core.Graphics.OpenGL.Assets
         public void Load()
         {
             var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).ToList();
+
+            foreach (var ubotype in types.Where(p => p.IsClass && !p.IsAbstract && typeof(IUBO).IsAssignableFrom(p)))
+            {
+                var inst = _objectCreator.Create<IUBO>(ubotype);
+                if (inst != null)
+                {
+                    _ubos.Add(ubotype, inst);
+                }
+            }
+
             //Load Textures
             foreach (var viewtype in types.Where(p => p.IsClass && !p.IsAbstract && typeof(ITexture).IsAssignableFrom(p)))
             {
@@ -37,15 +47,12 @@ namespace BlockRTS.Core.Graphics.OpenGL.Assets
             //load shaders
             foreach (var shadertype in types.Where(p => p.IsClass && !p.IsAbstract && typeof(IShaderProgram).IsAssignableFrom(p)))
             {
-                var inst = Activator.CreateInstance(shadertype) as IShaderProgram;
+                var inst = _objectCreator.Create<IShaderProgram>(shadertype);
                 if (inst != null)
                 {
-                 //   inst.Link();
-                  //  inst.AddUniforms();
                     _shaderPrograms.Add(shadertype, inst);
                 }
             }
-
 
         }
         
@@ -54,25 +61,18 @@ namespace BlockRTS.Core.Graphics.OpenGL.Assets
             return _textures.ContainsKey(typeof(T)) ? _textures[typeof(T)] : new DefaultTexture();
         }
 
-        public IShaderProgram Shader<T>() where T : IShaderProgram
+        public T Shader<T>() where T : IShaderProgram
         {
-            IShaderProgram program;
             if(_shaderPrograms.ContainsKey(typeof(T)))
             {
-                program = _shaderPrograms[typeof (T)];
-            }else
-            {
-                program = new DefaultShaderProgram();
+               return (T)_shaderPrograms[typeof (T)];
             }
-            return program;
+            throw new Exception("shader not found");
         }
- }
 
-
-    public interface IAssetManager
-    {
-        void Load();
-        ITexture Texture<T>() where T : ITexture;
-        IShaderProgram Shader<T>() where T : IShaderProgram;
+        public T UBO<T>() where T: IUBO
+        {
+            return _ubos.Where(kvp => kvp.Key == typeof (T)).Select(kvp=>(T)kvp.Value).Single();
+        }
     }
 }
