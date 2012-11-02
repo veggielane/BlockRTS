@@ -11,7 +11,7 @@ namespace BlockRTS.Core.Graphics
     {
         // Vect3 Postion { get; }
         Mat4 Model { get; set; }
-        Mat4 View { get; }
+        Mat4 View { get;  }
         Mat4 Projection { get; set; }
         Mat4 MVP { get; }
 

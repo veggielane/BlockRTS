@@ -45,19 +45,24 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
 
 
             var stl = new STL("chamfer_cube.stl", Color.Yellow);
-            var verts = new List<float>();
-            var mesh = stl.ToMesh();
+            var cubedata = new List<float>();
 
-            foreach (var vertex in mesh.Vertices)
+            foreach (var vertex in stl.ToMesh().Vertices)
             {
-                verts.Add((float)vertex.Position.X);
-                verts.Add((float)vertex.Position.Y);
-                verts.Add((float)vertex.Position.Z);
-
-
+                cubedata.Add((float)vertex.Position.X);
+                cubedata.Add((float)vertex.Position.Y);
+                cubedata.Add((float)vertex.Position.Z);
+            }
+            foreach (var vertex in stl.ToMesh().Vertices)
+            {
+                cubedata.Add((float)vertex.Normal.X);
+                cubedata.Add((float)vertex.Normal.Y);
+                cubedata.Add((float)vertex.Normal.Z);
             }
 
-            _squareVertices = verts.ToArray();
+
+
+            _squareVertices = cubedata.ToArray();
 
             GL.GenVertexArrays(1, out _squareVao);
             GL.GenBuffers(1, out _squareVbo);
@@ -68,16 +73,18 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
             GL.EnableVertexAttribArray(1);
             GL.EnableVertexAttribArray(2);
             GL.EnableVertexAttribArray(3);
+            GL.EnableVertexAttribArray(4);
 
-            GL.Arb.VertexAttribDivisor(1, 1);
-            
-            GL.Arb.VertexAttribDivisor(2, 1);
-            GL.Arb.VertexAttribDivisor(3, 1);
+
+            GL.Arb.VertexAttribDivisor(2, 1);//position
+            GL.Arb.VertexAttribDivisor(3, 1);//rotation
+            GL.Arb.VertexAttribDivisor(4, 1);//color
 
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
-            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 11 * sizeof(float), _squareVertices.Length * sizeof(float));
-            GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, 11 * sizeof(float), (_squareVertices.Length + 3) * sizeof(float));
-            GL.VertexAttribPointer(3, 4, VertexAttribPointerType.Float, false, 11 * sizeof(float), (_squareVertices.Length + 3 + 4) * sizeof(float));
+            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, 11 * sizeof(float), _squareVertices.Length * sizeof(float));
+            GL.VertexAttribPointer(3, 4, VertexAttribPointerType.Float, false, 11 * sizeof(float), (_squareVertices.Length + 3) * sizeof(float));
+            GL.VertexAttribPointer(4, 4, VertexAttribPointerType.Float, false, 11 * sizeof(float), (_squareVertices.Length + 3 + 4) * sizeof(float));
 
             Loaded = true;
         }
@@ -121,6 +128,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
                     //videoMemory[i++] = 0.66f;
                     //videoMemory[i++] = 0.78f;
                     //videoMemory[i++] = 1.0f;
+
                     videoMemory[i++] = (float)MathsHelper.Map(gameObject.BlockColor.R, 0, 255, 0, 1);
                     videoMemory[i++] = (float)MathsHelper.Map(gameObject.BlockColor.G, 0, 255, 0, 1);
                     videoMemory[i++] = (float)MathsHelper.Map(gameObject.BlockColor.B, 0, 255, 0, 1);

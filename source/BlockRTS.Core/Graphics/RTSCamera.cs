@@ -7,6 +7,7 @@ namespace BlockRTS.Core.Graphics
     {
         public Mat4 Model { get; set; }
 
+        
         public Mat4 View
         {
             get { return Mat4.LookAt(Eye, Target, Up); }
@@ -29,9 +30,14 @@ namespace BlockRTS.Core.Graphics
         {
             Model = Mat4.Identity;
 
+
             Eye = Vect3.Zero;
             Target = Vect3.Zero;
             Up = Vect3.UnitY;
+
+
+            Eye = new Vect3(0.0f, 0.0f, 80.0f);
+
 
         }
     }

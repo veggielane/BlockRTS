@@ -29,10 +29,15 @@ namespace BlockRTS.Core.Graphics.OpenGL
             _camera = camera;
             _viewManager = viewManager;
             _assetManager = assetManager;
-            _camera.Model = Mat4.Translate(0f, 0f, 0.0f);
+    
             _camera.Eye = new Vect3(0.0f, 0.0f, 80.0f);
             _camera.Projection = Mat4.CreatePerspectiveFieldOfView(Math.PI / 4.0, Width / (float)Height, 1, 512);
             VSync = VSyncMode.On;
+
+            Mouse.WheelChanged += (sender, args) =>
+                {
+                    _camera.Eye += new Vect3(0, 0, args.DeltaPrecise *-2.0);
+                };
         }
 
         private IShaderProgram _shader;
@@ -63,6 +68,30 @@ namespace BlockRTS.Core.Graphics.OpenGL
             if (Keyboard[Key.P])
             {
                 ToggleWireFrame();
+            }
+
+            if(Keyboard[Key.Left])
+            {
+                _camera.Eye += new Vect3(-0.1,0,0);
+                _camera.Target += new Vect3(-0.1, 0, 0);
+            }
+
+            if (Keyboard[Key.Right])
+            {
+                _camera.Eye += new Vect3(0.1, 0, 0);
+                _camera.Target += new Vect3(0.1, 0, 0);
+            }
+
+            if (Keyboard[Key.Up])
+            {
+                _camera.Eye += new Vect3(0, 0.1, 0);
+                _camera.Target += new Vect3(0, 0.1, 0);
+            }
+
+            if (Keyboard[Key.Down])
+            {
+                _camera.Eye += new Vect3(0, -0.1, 0);
+                _camera.Target += new Vect3(0, -0.1, 0);
             }
 
             _viewManager.Update(e.Time);

@@ -29,50 +29,55 @@ layout (location = 2) in vec4 vert_colour;
 layout (location = 3) in vec2 vert_texture;
 
 uniform mat4 position; 
+
+
 out vec3 normal; 
 out vec4 colour; 
-out vec2 texcoord;
+out vec3 LightIntensity;
+
+struct LightInfo {
+  vec4 Position; // Light position in eye coords.
+  vec3 La;       // Ambient light intensity
+  vec3 Ld;       // Diffuse light intensity
+  vec3 Ls;       // Specular light intensity
+};
+
+struct MaterialInfo {
+  vec3 Ka;            // Ambient reflectivity
+  vec3 Kd;            // Diffuse reflectivity
+  vec3 Ks;            // Specular reflectivity
+  float Shininess;    // Specular shininess factor
+};
+
+LightInfo Light = LightInfo(vec4(0.0,50.0,0.0,1.0),vec3(0.4, 0.4, 0.4),vec3(1.0, 1.0, 1.0),vec3(1.0, 1.0, 1.0));
+MaterialInfo Material = MaterialInfo(vec3(0.9, 0.5, 0.3),vec3(0.9, 0.5, 0.3),vec3(0.8, 0.8, 0.8),100.0);
+
 void main(void) 
 { 
-  normal = normalize(mat3(NormalMatrix) * vert_normal);
-  //normal = (MVP * vec4(vert_normal, 0)).xyz; //works only for orthogonal modelview 
-  colour = vert_colour; 
-  texcoord = vert_texture;
-  gl_Position = (Projection * View * Model) * position * vec4(vert_position, 1); 
-  //gl_Position = (MVP) * position * vec4(vert_position, 1); 
+    vec3 tnorm = normalize(mat3(NormalMatrix) * vert_normal);
+    vec4 eyeCoords = (View * Model) * vec4(vert_position,1.0);
+    vec3 s = normalize(vec3((Light.Position * View) - eyeCoords));
+    vec3 v = normalize(-eyeCoords.xyz);
+    vec3 r = reflect( -s, tnorm );
+    float sDotN = max( dot(s,tnorm), 0.0 );
+    vec3 ambient = Light.La * Material.Ka;
+    vec3 diffuse = Light.Ld * Material.Kd * sDotN;
+    vec3 spec = vec3(0.0);
+    if( sDotN > 0.0 )
+       spec = Light.Ls * Material.Ks *
+              pow( max( dot(r,v), 0.0 ), Material.Shininess );
+
+    LightIntensity = ambient + diffuse*vert_colour + spec;
+    gl_Position = (MVP) * position * vec4(vert_position, 1); 
 }");
 
             CompileShader(ShaderType.FragmentShader, @"#version 400
-precision highp float;
 
-const vec3 ambient = vec3(0.3, 0.3, 0.3);
-const vec3 lightVecNormalized = normalize(vec3(0.5, 1, 2.0));
-const vec3 lightColor = vec3(0.9, 0.9, 0.9);
-
-in vec3 normal;
-in vec4 colour;
-in vec2 texcoord;
-
-uniform sampler2D tex;
-
+in vec3 LightIntensity;
 layout( location = 0 ) out vec4 FragColor;
-
-void main(void)
-{
-  float diffuse = clamp(dot(lightVecNormalized, normalize(normal)), 0.0, 1.0);
-  FragColor = colour * vec4(ambient + diffuse * lightColor, 1.0);
-  //out_frag_color = texture2D(tex, texcoord) * vec4(ambient + diffuse * lightColor, 1.0);
-
-
-  if(colour == vec4(0.0,0.0,0.0,0.0)){
-     // FragColor = texture2D(tex, texcoord);
-  }else{
-     // FragColor = colour * texture2D(tex, texcoord);
-  }
+void main() {
+    FragColor = vec4(LightIntensity, 1.0);
 }");
-            GL.BindAttribLocation(Handle, 0, "position");
-            GL.BindAttribLocation(Handle, 1, "instance_position");
-            GL.BindAttribLocation(Handle, 2, "instance_rotation");
             Link();
             Uniforms.Add("position", new UniformMatrix4("position", this));
             _assetManager.UBO<CameraUBO>().BindToShaderProgram(this);
