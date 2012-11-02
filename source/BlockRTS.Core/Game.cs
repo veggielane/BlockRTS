@@ -63,10 +63,10 @@ namespace BlockRTS.Core
             //        }
             //    }
             //}
-            Bus.Add(GameObjectRequest.Create<WhiteBlock>(Timer.LastTickTime, Vect3.Zero, Quat.Identity));
+            Bus.Add(GameObjectRequest.Create<BlueBlock>(Timer.LastTickTime, Vect3.Zero, Quat.Identity));
             Bus.Add(GameObjectRequest.Create<WhiteBlock>(Timer.LastTickTime, new Vect3(10,10,10), Quat.Identity));
 
-            Bus.Add(GameObjectRequest.Create<Explosion>(Timer.LastTickTime, new Vect3(0, 0, 0), Quat.Identity));
+            //Bus.Add(GameObjectRequest.Create<Explosion>(Timer.LastTickTime, new Vect3(0, 0, 0), Quat.Identity));
 
             /*
             var _rand = new Random();

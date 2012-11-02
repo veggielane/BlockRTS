@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BlockRTS.Core.Graphics.OpenGL.Assets;
 using BlockRTS.Core.Messaging;
 using BlockRTS.Core.Timing;
@@ -16,7 +12,7 @@ namespace BlockRTS.Core.Graphics.OpenGL
         private readonly ICamera _camera;
         private readonly IViewManager _viewManager;
         private readonly IAssetManager _assetManager;
-       // private readonly OpenGLWindow _window;
+
         public OpenGLGraphics(IMessageBus bus, ITimer timer, ICamera camera, IViewManager viewManager, IAssetManager assetManager)
         {
             _bus = bus;

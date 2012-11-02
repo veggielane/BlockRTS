@@ -33,7 +33,6 @@ namespace BlockRTS.Core.Graphics.OpenGL
             _camera.Eye = new Vect3(0.0f, 0.0f, 80.0f);
             _camera.Projection = Mat4.CreatePerspectiveFieldOfView(Math.PI / 4.0, Width / (float)Height, 1, 512);
             VSync = VSyncMode.On;
-            
         }
 
         private IShaderProgram _shader;

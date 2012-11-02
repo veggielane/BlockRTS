@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameObjects\BaseGameObject.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Graphics\Meshing\Mesh.cs" />
     <Compile Include="Graphics\Meshing\Vertex.cs" />
     <Compile Include="Graphics\RTSCamera.cs" />
+    <Compile Include="Maths\MathsHelper.cs" />
     <Compile Include="Physics\Forces\GravityForce.cs" />
     <Compile Include="Shapes\Cube.cs" />
     <Compile Include="Graphics\IViewManager.cs" />

@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BlockRTS.Core.GameObjects;
+using BlockRTS.Core.GameObjects.Blocks;
 using BlockRTS.Core.Graphics.Models;
 using BlockRTS.Core.Graphics.OpenGL.Assets;
-using BlockRTS.Core.Graphics.OpenGL.Assets.Textures;
 using BlockRTS.Core.Graphics.OpenGL.Shaders;
 using BlockRTS.Core.Maths;
 using OpenTK.Graphics.OpenGL;
@@ -17,12 +15,17 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
     class BlockBatchView : IBatchView
     {
         private readonly IAssetManager _assets;
+        public bool Loaded { get; private set; }
 
+        private readonly IList<BaseBlock> _gameObjects = new List<BaseBlock>();
 
-        private IList<IGameObject> _gameObjects = new List<IGameObject>();
-
-        //private VAO _cubevao;
         private IShaderProgram _shader;
+
+        private int _squareVao, _squareVbo;
+        private const float Size = 0.5f;
+        private float[] _squareVertices;
+
+        private int _count;
 
         public BlockBatchView(IAssetManager assetManager)
         {
@@ -33,21 +36,15 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
         public void Add(IGameObject gameObject)
         {
 
-            _gameObjects.Add(gameObject);
+            _gameObjects.Add((BaseBlock)gameObject);
         }
 
-        public bool Loaded { get; private set; }
-
-        //private VBO _vbo;
-        //private VAO _vao;
-        private int _squareVao, _squareVbo;
-        private const float Size = 0.5f;
         public void Load()
         {
             _shader = _assets.Shader<BlockShaderProgram>();
 
 
-            STL stl = new STL("chamfer_cube.stl", Color.Yellow);
+            var stl = new STL("chamfer_cube.stl", Color.Yellow);
             var verts = new List<float>();
             var mesh = stl.ToMesh();
 
@@ -61,39 +58,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
             }
 
             _squareVertices = verts.ToArray();
-            /*
-            _squareVertices = new[]{
-                //Front Face
-                -Size, -Size, Size,
-                Size, -Size, Size,
-                Size, Size, Size,
-                -Size, Size, Size,
-                //Back Face
-                -Size, -Size, -Size,
-                -Size, Size, -Size,
-                Size, Size, -Size,
-                Size, -Size, -Size,
-                //Top Face
-                -Size, Size, -Size,
-                -Size, Size, Size,
-                Size, Size, Size,
-                Size, Size, -Size,
-                //Bottom Face
-                -Size, -Size, -Size,
-                Size, -Size, -Size,
-                Size, -Size, Size,
-                -Size, -Size, Size,
-                //Right Face
-                Size, -Size, -Size,
-                Size, Size, -Size,
-                Size, Size, Size,
-                Size, -Size, Size,
-                //Left Face
-                -Size, -Size, -Size,
-                -Size, -Size, Size,
-                -Size, Size, Size,
-                -Size, Size, -Size
-            };*/
+
             GL.GenVertexArrays(1, out _squareVao);
             GL.GenBuffers(1, out _squareVbo);
             GL.BindVertexArray(_squareVao);
@@ -122,13 +87,10 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
             throw new NotImplementedException();
         }
 
-        private float[] _squareVertices;
 
-        private int _count = 0;
 
         public void Update(double delta)
         {
-            //var objects = _gameObjects.ToArray();
             _count = _gameObjects.Count();
             GL.BindVertexArray(_squareVao);
             GL.BindBuffer(BufferTarget.ArrayBuffer, _squareVbo);
@@ -153,11 +115,16 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
                     videoMemory[i++] = (float)gameObject.Rotation.Y;
                     videoMemory[i++] = (float)gameObject.Rotation.Z;
                     videoMemory[i++] = (float)gameObject.Rotation.W;
-                    //color
-                    videoMemory[i++] = 1.0f;
-                    videoMemory[i++] = 1.0f;
-                    videoMemory[i++] = 1.0f;
-                    videoMemory[i++] = 1.0f;
+                    //color 0.37,0.66,0.78,0.9
+                    
+                    //videoMemory[i++] = 0.37f;
+                    //videoMemory[i++] = 0.66f;
+                    //videoMemory[i++] = 0.78f;
+                    //videoMemory[i++] = 1.0f;
+                    videoMemory[i++] = (float)MathsHelper.Map(gameObject.BlockColor.R, 0, 255, 0, 1);
+                    videoMemory[i++] = (float)MathsHelper.Map(gameObject.BlockColor.G, 0, 255, 0, 1);
+                    videoMemory[i++] = (float)MathsHelper.Map(gameObject.BlockColor.B, 0, 255, 0, 1);
+                    videoMemory[i++] = (float)MathsHelper.Map(gameObject.BlockColor.A, 0, 255, 0, 1);
                 }
             }
             GL.UnmapBuffer(BufferTarget.ArrayBuffer);

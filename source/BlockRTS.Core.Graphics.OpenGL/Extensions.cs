@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BlockRTS.Core.Graphics.Meshing;
 using BlockRTS.Core.Graphics.OpenGL.Vertices;
 using BlockRTS.Core.Maths;
@@ -31,7 +28,6 @@ namespace BlockRTS.Core.Graphics.OpenGL
 
         public static Matrix4 ToMatrix4(this Mat4 m)
         {
-
             var md = m.Transpose();//http://www.opentk.com/node/2771
             return new Matrix4(
                 (float)md[1, 1], (float)md[1, 2], (float)md[1, 3], (float)md[1, 4],
@@ -39,8 +35,6 @@ namespace BlockRTS.Core.Graphics.OpenGL
                 (float)md[3, 1], (float)md[3, 2], (float)md[3, 3], (float)md[3, 4],
                 (float)md[4, 1], (float)md[4, 2], (float)md[4, 3], (float)md[4, 4]);
         }
-
-
 
         public static OpenGLVertex ToOpenGLVertex(this Vertex vertex)
         {

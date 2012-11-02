@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
 namespace BlockRTS.Core.Graphics.OpenGL.Shaders
@@ -30,8 +30,6 @@ namespace BlockRTS.Core.Graphics.OpenGL.Shaders
              private set { _handle = value; }
          }
 
-
-
          protected BaseUBO(string blockName, int location, int size)
          {
              _blockName = blockName;
@@ -43,6 +41,10 @@ namespace BlockRTS.Core.Graphics.OpenGL.Shaders
                  GL.BufferData(BufferTarget.UniformBuffer, (IntPtr)(_size), (IntPtr)(null), BufferUsageHint.StreamDraw);
                  GL.BindBufferRange(BufferTarget.UniformBuffer, _location, _handle, (IntPtr)0, (IntPtr)_size);
              }
+         }
+         protected BaseUBO(string blockName, int location):this(blockName,location,Marshal.SizeOf(default(T)))
+         {
+
          }
 
          public void BindToShaderProgram(IShaderProgram program)
@@ -68,25 +70,4 @@ namespace BlockRTS.Core.Graphics.OpenGL.Shaders
              GL.BindBuffer(BufferTarget.UniformBuffer, 0);
          }
      }
-
-    public class CameraUBO : BaseUBO<CameraUBO.CameraData>
-    {
-
-        public struct CameraData
-        {
-            public Matrix4 MVP;
-        }
-
-        public CameraUBO()
-            : base("Camera", 0, sizeof(float) * 4 * 4)
-        {
-
-        }
-
-        public void Update(ICamera camera)
-        {
-            Data = new CameraData { MVP = camera.MVP.ToMatrix4() };
-            Update();
-        }
-    }
 }

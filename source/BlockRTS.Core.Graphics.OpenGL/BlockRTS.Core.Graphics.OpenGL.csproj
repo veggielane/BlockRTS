@@ -51,12 +51,14 @@
     <Compile Include="Assets\Bind.cs" />
     <Compile Include="Assets\IAssetManager.cs" />
     <Compile Include="Assets\Textures\DefaultTexture.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="OpenGLGraphics.cs" />
     <Compile Include="OpenGLWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shaders\BaseShaderProgram.cs" />
     <Compile Include="Shaders\BlockShaderProgram.cs" />
+    <Compile Include="Shaders\CameraUBO.cs" />
     <Compile Include="Shaders\DefaultShaderProgram.cs" />
     <Compile Include="IAsset.cs" />
     <Compile Include="Shaders\IShaderProgram.cs" />
