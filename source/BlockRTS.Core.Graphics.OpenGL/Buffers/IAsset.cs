@@ -1,4 +1,4 @@
-namespace BlockRTS.Core.Graphics.OpenGL
+namespace BlockRTS.Core.Graphics.OpenGL.Buffers
 {
     public interface IAsset
     {

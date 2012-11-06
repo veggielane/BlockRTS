@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BlockRTS.Core.Graphics.OpenGL;
+using BlockRTS.Core.Graphics.OpenGL.Buffers;
 using BlockRTS.Core.Graphics.OpenGL.Shaders;
 using OpenTK.Graphics.OpenGL;
 
@@ -18,7 +19,24 @@ namespace BlockRTS.Core.Graphics.OpenGL
         Image Source { get; }
         void Load();
     }
-
+    /*
+    public class FBOTexture : BaseTexture
+    {
+        public override Image Source
+        {
+            get
+            {
+                var img = new Bitmap(2, 2);
+                using (var gfx = System.Drawing.Graphics.FromImage(img))
+                using (var brush = new SolidBrush(Color.White))
+                {
+                    gfx.FillRectangle(brush, 0, 0, 2, 2);
+                    gfx.DrawLine(Pens.Green, 0, 0, 20, 20);
+                    return img;
+                }
+            }
+        }
+    }*/
 
     public abstract class BaseTexture : ITexture
     {

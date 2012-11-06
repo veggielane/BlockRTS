@@ -19,6 +19,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Assets.Textures
                 using (var brush = new SolidBrush(Color.White))
                 {
                     gfx.FillRectangle(brush, 0, 0, 2, 2);
+                    gfx.DrawLine(Pens.Green,0,0,20,20);
                     return img;
                 }
             }

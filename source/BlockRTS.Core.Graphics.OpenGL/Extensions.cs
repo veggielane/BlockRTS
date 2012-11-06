@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using BlockRTS.Core.Graphics.Meshing;
+using BlockRTS.Core.Graphics.OpenGL.Buffers;
 using BlockRTS.Core.Graphics.OpenGL.Vertices;
 using BlockRTS.Core.Maths;
 using OpenTK;

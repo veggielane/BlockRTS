@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using BlockRTS.Core.Graphics.OpenGL.Assets;
+using BlockRTS.Core.Graphics.OpenGL.Assets.Textures;
+using BlockRTS.Core.Graphics.OpenGL.Buffers;
 using BlockRTS.Core.Graphics.OpenGL.Shaders;
+using BlockRTS.Core.Graphics.OpenGL.Vertices;
 using BlockRTS.Core.Maths;
 using BlockRTS.Core.Messaging;
 using BlockRTS.Core.Messaging.Messages;
@@ -42,7 +46,9 @@ namespace BlockRTS.Core.Graphics.OpenGL
 
         private IShaderProgram _shader;
 
-
+        private FBO _fbo;
+        private VAO _vao;
+        private VBO _vbo;
         protected override void OnLoad(EventArgs e)
         {
             GL.Enable(EnableCap.Texture2D);
@@ -50,9 +56,20 @@ namespace BlockRTS.Core.Graphics.OpenGL
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-
+            _fbo = new FBO(Width,Height);
             _assetManager.Load();
             _shader = _assetManager.Shader<DefaultShaderProgram>();
+
+            var data = new List<OpenGLVertex>
+            {
+                new OpenGLVertex {Position = new Vector3(-1, -1, 0),TexCoord = new Vector2(0,0)},
+                new OpenGLVertex {Position = new Vector3(1, -1, 0),TexCoord = new Vector2(1,0)},
+                new OpenGLVertex {Position = new Vector3(1, 1, 0),TexCoord = new Vector2(1,1)},
+                new OpenGLVertex {Position = new Vector3(-1, 1, 0),TexCoord = new Vector2(0,1)}
+            };
+
+            _vbo = new VBO(data){BeginMode = BeginMode.Quads};
+            _vao = new VAO(_assetManager.Shader<FlatShaderProgram>(), _vbo);
 
             _viewManager.Load();
 
@@ -114,31 +131,45 @@ namespace BlockRTS.Core.Graphics.OpenGL
             GL.PolygonMode(MaterialFace.FrontAndBack, _wireframe ? PolygonMode.Line : PolygonMode.Fill);
         }
 
+   
+        
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+            //GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            //GL.ClearColor(new Color4(0.137f, 0.121f, 0.125f, 0f));
+            //_viewManager.Render();
+
+            using (Bind.Asset(_fbo))
+            {
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+                GL.ClearColor(new Color4(0.137f, 0.121f, 0.125f, 0f));
+                _viewManager.Render();
+            }
+
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.ClearColor(new Color4(0.137f, 0.121f, 0.125f, 0f));
 
-            _viewManager.Render();
+            GL.BindTexture(TextureTarget.Texture2D, _fbo.ColorTexture);
+            using (Bind.Asset(_assetManager.Shader<FlatShaderProgram>()))
+            using (new Bind(_vao))
+            {
+                GL.DrawArrays(_vao.VBO.BeginMode, 0, _vao.VBO.Count);
+            }
 
+
+ 
             SwapBuffers();
             ErrorCode err = GL.GetError();
             if (err != ErrorCode.NoError)
                 Console.WriteLine("Error at Swapbuffers: " + err.ToString());
-            //Title =" FPS: " + string.Format("{0:F}", 1.0 / e.Time);
+            Title =" FPS: " + string.Format("{0:F}", 1.0 / e.Time);
         }
 
         protected override void OnResize(EventArgs e)
         {
             GL.Viewport(0, 0, Width, Height);
             Bus.Add(new DebugMessage(Timer.LastTickTime, "Window Resize"));
-
-
             _camera.Projection = Mat4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, Width/(float) Height, 0.1f, 512.0f);
-
-
-
-
         }
 
         protected override void OnClosed(EventArgs e)

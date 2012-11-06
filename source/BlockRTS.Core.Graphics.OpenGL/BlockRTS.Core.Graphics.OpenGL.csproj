@@ -48,9 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\AssetManager.cs" />
-    <Compile Include="Assets\Bind.cs" />
+    <Compile Include="Buffers\Bind.cs" />
     <Compile Include="Assets\IAssetManager.cs" />
     <Compile Include="Assets\Textures\DefaultTexture.cs" />
+    <Compile Include="Buffers\FBO.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="OpenGLGraphics.cs" />
@@ -60,11 +61,12 @@
     <Compile Include="Shaders\BlockShaderProgram.cs" />
     <Compile Include="Shaders\CameraUBO.cs" />
     <Compile Include="Shaders\DefaultShaderProgram.cs" />
-    <Compile Include="IAsset.cs" />
+    <Compile Include="Buffers\IAsset.cs" />
+    <Compile Include="Shaders\FlatShaderProgram.cs" />
     <Compile Include="Shaders\IShaderProgram.cs" />
     <Compile Include="Assets\Textures\Texture.cs" />
-    <Compile Include="Assets\VAO.cs" />
-    <Compile Include="Assets\VBO.cs" />
+    <Compile Include="Buffers\VAO.cs" />
+    <Compile Include="Buffers\VBO.cs" />
     <Compile Include="Shaders\UBO.cs" />
     <Compile Include="Vertices\OpenGLVertex.cs" />
     <Compile Include="Views\BlockBatchView.cs" />

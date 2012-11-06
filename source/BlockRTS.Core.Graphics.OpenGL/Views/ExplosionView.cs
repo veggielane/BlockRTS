@@ -4,6 +4,7 @@ using BlockRTS.Core.GameObjects.Blocks;
 using BlockRTS.Core.Graphics.Meshing;
 using BlockRTS.Core.Graphics.OpenGL.Assets;
 using BlockRTS.Core.Graphics.OpenGL.Assets.Textures;
+using BlockRTS.Core.Graphics.OpenGL.Buffers;
 using BlockRTS.Core.Graphics.OpenGL.Shaders;
 using BlockRTS.Core.Maths;
 using BlockRTS.Core.Shapes;
@@ -16,20 +17,18 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
     {
         public IGameObject GameObject { get; set; }
         private readonly IAssetManager _assets;
-        private readonly IViewManager _viewManager;
 
         public bool Loaded { get; private set; }
 
-        public ExplosionView(IAssetManager assets, IGameObject gameObject, IViewManager viewManager)
+        public ExplosionView(IAssetManager assets, IGameObject gameObject)
         {
             GameObject = gameObject;
             _assets = assets;
- 
-            _viewManager = viewManager;
         }
 
         private VAO _vao;
         private IShaderProgram _shader;
+
         public void Load()
         {
             _shader = _assets.Shader<DefaultShaderProgram>();

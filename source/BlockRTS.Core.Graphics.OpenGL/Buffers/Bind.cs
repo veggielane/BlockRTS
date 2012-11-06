@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BlockRTS.Core.Graphics.OpenGL.Shaders;
 
-namespace BlockRTS.Core.Graphics.OpenGL
+namespace BlockRTS.Core.Graphics.OpenGL.Buffers
 {
     public class Bind : IDisposable
     {
