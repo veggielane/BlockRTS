@@ -60,6 +60,7 @@
     <Compile Include="Shaders\BaseShaderProgram.cs" />
     <Compile Include="Shaders\BlockShaderProgram.cs" />
     <Compile Include="Shaders\CameraUBO.cs" />
+    <Compile Include="Shaders\BasicShaderProgram.cs" />
     <Compile Include="Shaders\DefaultShaderProgram.cs" />
     <Compile Include="Buffers\IAsset.cs" />
     <Compile Include="Shaders\FlatShaderProgram.cs" />

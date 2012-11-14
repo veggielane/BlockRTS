@@ -50,10 +50,13 @@
     <Compile Include="GameObjects\Blocks\BlueBlock.cs" />
     <Compile Include="GameObjects\Blocks\WhiteBlock.cs" />
     <Compile Include="GameObjects\GameObjectFactory.cs" />
+    <Compile Include="GameObjects\ICanBeSelected.cs" />
     <Compile Include="GameObjects\IGameObject.cs" />
     <Compile Include="GameObjects\IGameObjectFactory.cs" />
+    <Compile Include="GameObjects\IHasBoundingSphere.cs" />
     <Compile Include="GameObjects\Planet.cs" />
     <Compile Include="Graphics\BindViewAttribute.cs" />
+    <Compile Include="Graphics\GUI\IGUI.cs" />
     <Compile Include="Graphics\Lighting\Light.cs" />
     <Compile Include="Graphics\Meshing\Extensions.cs" />
     <Compile Include="Graphics\Models\IModel.cs" />

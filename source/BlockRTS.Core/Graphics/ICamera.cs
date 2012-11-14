@@ -18,5 +18,10 @@ namespace BlockRTS.Core.Graphics
         Vect3 Eye { get; set; }
         Vect3 Target { get; set; }
         Vect3 Up { get; set; }
+
+        void Update(double delta);
+        void Resize(int width, int height);
+
+        void Pick(int x, int y);
     }
 }

@@ -23,6 +23,27 @@ namespace BlockRTS.Core.Maths
         }
     }
 
+    public class Vect4
+    {
+        public double X { get; private set; }
+        public double Y { get; private set; }
+        public double Z { get; private set; }
+        public double A { get; private set; }
+
+        public Vect4(double x, double y, double z, double a)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+            A = a;
+        }
+
+        public static Vect4 Zero
+        {
+            get { return new Vect4(0, 0, 0, 0); }
+        }
+    }
+
     public class Vect3
     {
         public Vect3(double x, double y, double z)

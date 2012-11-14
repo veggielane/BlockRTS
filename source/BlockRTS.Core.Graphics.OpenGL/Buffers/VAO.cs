@@ -6,6 +6,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Buffers
 {
     public class VAO : IAsset
     {
+        private readonly IShaderProgram _program;
         private int _handle;
         public int Handle
         {
@@ -17,6 +18,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Buffers
 
         public VAO(IShaderProgram program, VBO vbo)
         {
+            _program = program;
             VBO = vbo;
             GL.GenVertexArrays(1, out _handle);
             using (new Bind(program))
@@ -51,6 +53,15 @@ namespace BlockRTS.Core.Graphics.OpenGL.Buffers
         public void UnBind()
         {
             GL.BindVertexArray(0);
+        }
+
+        public void Draw()
+        {
+            using (new Bind(_program))
+            using (new Bind(this))
+            {
+                GL.DrawArrays(VBO.BeginMode, 0, VBO.Count);
+            }
         }
     }
 }

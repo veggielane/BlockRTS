@@ -29,6 +29,12 @@ namespace BlockRTS.Core
             return (max - min) * rnd.NextDouble() + min;
         }
 
+
+        public static bool NearlyEquals(this double x, double y, double epsilon = 0.00001)
+        {
+            return MathsHelper.NearlyEquals(x,y,epsilon);
+        }
+
         public static Quat ToQuat(this Euler e)
         {
             var sinp = Math.Sin(e.Pitch.Radians / 2.0);

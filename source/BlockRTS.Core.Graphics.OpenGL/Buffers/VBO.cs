@@ -41,15 +41,16 @@ namespace BlockRTS.Core.Graphics.OpenGL.Buffers
 
         private void Buffer(OpenGLVertex[] data)
         {
-            Bind();
-            Count = data.Count();
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * BlittableValueType.StrideOf(data)), data,
-              BufferUsageHint.StaticDraw);
-            int size;
-            GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, out size);
-            if (data.Length * BlittableValueType.StrideOf(data) != size)
-                throw new ApplicationException("Vertex data not uploaded correctly");
-            UnBind();
+            using (new Bind(this))
+            {
+                Count = data.Count();
+                GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * BlittableValueType.StrideOf(data)), data,
+                  BufferUsageHint.StaticDraw);
+                int size;
+                GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, out size);
+                if (data.Length * BlittableValueType.StrideOf(data) != size)
+                    throw new ApplicationException("Vertex data not uploaded correctly");
+            }
         }
 
         public void Bind()

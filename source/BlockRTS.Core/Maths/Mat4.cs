@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BlockRTS.Core;
 
 namespace BlockRTS.Core.Maths
 {
@@ -75,22 +76,41 @@ namespace BlockRTS.Core.Maths
 
         public Mat4 Inverse()
         {
-            throw new NotImplementedException();
+            return Adjugate()/Determinant();
         }
 
         public Mat4 Cofactor()
         {
-            throw new NotImplementedException();
+            return new Mat4(new[,]{
+                {
+                    -(this[2, 4] * this[3, 3] * this[4, 2]) + this[2, 3] * this[3, 4] * this[4, 2] + this[2, 4] * this[3, 2] * this[4, 3] - this[2, 2] * this[3, 4] * this[4, 3] - this[2, 3] * this[3, 2] * this[4, 4] + this[2, 2] * this[3, 3] * this[4, 4], this[2, 4] * this[3, 3] * this[4, 1] - this[2, 3] * this[3, 4] * this[4, 1] - this[2, 4] * this[3, 1] * this[4, 3] + this[2, 1] * this[3, 4] * this[4, 3] + this[2, 3] * this[3, 1] * this[4, 4] - this[2, 1] * this[3, 3] * this[4, 4], -(this[2, 4] * this[3, 2] * this[4, 1]) + this[2, 2] * this[3, 4] * this[4, 1] + this[2, 4] * this[3, 1] * this[4, 2] - this[2, 1] * this[3, 4] * this[4, 2] - this[2, 2] * this[3, 1] * this[4, 4] + this[2, 1] * this[3, 2] * this[4, 4], this[2, 3] * this[3, 2] * this[4, 1] - this[2, 2] * this[3, 3] * this[4, 1] - this[2, 3] * this[3, 1] * this[4, 2] + this[2, 1] * this[3, 3] * this[4, 2] + this[2, 2] * this[3, 1] * this[4, 3] - this[2, 1] * this[3, 2] * this[4, 3]
+                },
+                {
+                    this[1, 4] * this[3, 3] * this[4, 2] - this[1, 3] * this[3, 4] * this[4, 2] - this[1, 4] * this[3, 2] * this[4, 3] + this[1, 2] * this[3, 4] * this[4, 3] + this[1, 3] * this[3, 2] * this[4, 4] - this[1, 2] * this[3, 3] * this[4, 4], -(this[1, 4] * this[3, 3] * this[4, 1]) + this[1, 3] * this[3, 4] * this[4, 1] + this[1, 4] * this[3, 1] * this[4, 3] - this[1, 1] * this[3, 4] * this[4, 3] - this[1, 3] * this[3, 1] * this[4, 4] + this[1, 1] * this[3, 3] * this[4, 4], this[1, 4] * this[3, 2] * this[4, 1] - this[1, 2] * this[3, 4] * this[4, 1] - this[1, 4] * this[3, 1] * this[4, 2] + this[1, 1] * this[3, 4] * this[4, 2] + this[1, 2] * this[3, 1] * this[4, 4] - this[1, 1] * this[3, 2] * this[4, 4], -(this[1, 3] * this[3, 2] * this[4, 1]) + this[1, 2] * this[3, 3] * this[4, 1] + this[1, 3] * this[3, 1] * this[4, 2] - this[1, 1] * this[3, 3] * this[4, 2] - this[1, 2] * this[3, 1] * this[4, 3] + this[1, 1] * this[3, 2] * this[4, 3]
+                },
+                {
+                    -(this[1, 4] * this[2, 3] * this[4, 2]) + this[1, 3] * this[2, 4] * this[4, 2] + this[1, 4] * this[2, 2] * this[4, 3] - this[1, 2] * this[2, 4] * this[4, 3] - this[1, 3] * this[2, 2] * this[4, 4] + this[1, 2] * this[2, 3] * this[4, 4], this[1, 4] * this[2, 3] * this[4, 1] - this[1, 3] * this[2, 4] * this[4, 1] - this[1, 4] * this[2, 1] * this[4, 3] + this[1, 1] * this[2, 4] * this[4, 3] + this[1, 3] * this[2, 1] * this[4, 4] - this[1, 1] * this[2, 3] * this[4, 4], -(this[1, 4] * this[2, 2] * this[4, 1]) + this[1, 2] * this[2, 4] * this[4, 1] + this[1, 4] * this[2, 1] * this[4, 2] - this[1, 1] * this[2, 4] * this[4, 2] - this[1, 2] * this[2, 1] * this[4, 4] + this[1, 1] * this[2, 2] * this[4, 4], this[1, 3] * this[2, 2] * this[4, 1] - this[1, 2] * this[2, 3] * this[4, 1] - this[1, 3] * this[2, 1] * this[4, 2] + this[1, 1] * this[2, 3] * this[4, 2] + this[1, 2] * this[2, 1] * this[4, 3] - this[1, 1] * this[2, 2] * this[4, 3]
+                },
+                {
+                    this[1, 4] * this[2, 3] * this[3, 2] - this[1, 3] * this[2, 4] * this[3, 2] - this[1, 4] * this[2, 2] * this[3, 3] + this[1, 2] * this[2, 4] * this[3, 3] + this[1, 3] * this[2, 2] * this[3, 4] - this[1, 2] * this[2, 3] * this[3, 4], -(this[1, 4] * this[2, 3] * this[3, 1]) + this[1, 3] * this[2, 4] * this[3, 1] + this[1, 4] * this[2, 1] * this[3, 3] - this[1, 1] * this[2, 4] * this[3, 3] - this[1, 3] * this[2, 1] * this[3, 4] + this[1, 1] * this[2, 3] * this[3, 4], this[1, 4] * this[2, 2] * this[3, 1] - this[1, 2] * this[2, 4] * this[3, 1] - this[1, 4] * this[2, 1] * this[3, 2] + this[1, 1] * this[2, 4] * this[3, 2] + this[1, 2] * this[2, 1] * this[3, 4] - this[1, 1] * this[2, 2] * this[3, 4], -(this[1, 3] * this[2, 2] * this[3, 1]) + this[1, 2] * this[2, 3] * this[3, 1] + this[1, 3] * this[2, 1] * this[3, 2] - this[1, 1] * this[2, 3] * this[3, 2] - this[1, 2] * this[2, 1] * this[3, 3] + this[1, 1] * this[2, 2] * this[3, 3]
+                }});
         }
 
-        public Mat4 Adjoint()
+        public Mat4 Adjugate ()
         {
-            throw new NotImplementedException();
+            return Cofactor().Transpose();
         }
 
         public Double Determinant()
         {
-            throw new NotImplementedException();
+            return this[1, 1]*this[2, 2]*this[3, 3]*this[4, 4] + this[1, 1]*this[2, 3]*this[3, 4]*this[4, 2] + this[1, 1]*this[2, 4]*this[3, 2]*this[4, 3]
+                 + this[1, 2]*this[2, 1]*this[3, 4]*this[4, 3] + this[1, 2]*this[2, 3]*this[3, 1]*this[4, 4] + this[1, 2]*this[2, 4]*this[3, 3]*this[4, 1]
+                 + this[1, 3]*this[2, 1]*this[3, 2]*this[4, 4] + this[1, 3]*this[2, 2]*this[3, 4]*this[4, 1] + this[1, 3]*this[2, 4]*this[3, 1]*this[4, 1]
+                 + this[1, 4]*this[2, 1]*this[3, 3]*this[4, 2] + this[1, 4]*this[2, 2]*this[3, 1]*this[4, 3] + this[1, 4]*this[2, 3]*this[3, 2]*this[4, 1]
+                 - this[1, 1]*this[2, 2]*this[3, 4]*this[4, 3] - this[1, 1]*this[2, 3]*this[3, 2]*this[4, 4] - this[1, 1]*this[2, 4]*this[3, 3]*this[4, 2]
+                 - this[1, 2]*this[2, 1]*this[3, 3]*this[4, 4] - this[1, 2]*this[2, 3]*this[3, 4]*this[4, 1] - this[1, 2]*this[2, 4]*this[3, 1]*this[4, 3]
+                 - this[1, 3]*this[2, 1]*this[3, 4]*this[4, 2] - this[1, 3]*this[2, 2]*this[3, 1]*this[4, 4] - this[1, 3]*this[2, 4]*this[3, 2]*this[4, 1]
+                 - this[1, 4]*this[2, 1]*this[3, 2]*this[4, 3] - this[1, 4]*this[2, 2]*this[3, 3]*this[4, 1] - this[1, 4]*this[2, 3]*this[3, 1]*this[4, 2];
         }
 
         public Mat4 Add(Mat4 matrix)
@@ -329,6 +349,25 @@ namespace BlockRTS.Core.Maths
             return m.Multiply(d);
         }
 
+
+        public static Vect4 operator *(Mat4 m, Vect4 v)
+        {
+            return new Vect4(
+                m._data[0, 0] * v.X + m._data[0, 1] * v.Y + m._data[0, 2] * v.Z +m._data[0, 3] * v.A,
+                m._data[1, 0] * v.X + m._data[1, 1] * v.Y + m._data[1, 2] * v.Z +m._data[1, 3] * v.A,
+                m._data[2, 0] * v.X + m._data[2, 1] * v.Y + m._data[2, 2] * v.Z +m._data[2, 3] * v.A,
+                m._data[3, 0] * v.X + m._data[3, 1] * v.Y + m._data[3, 2] * v.Z +m._data[3, 3] * v.A
+                );
+            /*
+            return new Mat4(new[,]
+            {
+                {m._data[0, 0]*v.X, m._data[0, 1]*v.Y, m._data[0, 2]*v.Z, m._data[0, 3]*v.A},
+                {m._data[1, 0]*v.X, m._data[1, 1]*v.Y, m._data[1, 2]*v.Z, m._data[1, 3]*v.A},
+                {m._data[2, 0]*v.X, m._data[2, 1]*v.Y, m._data[2, 2]*v.Z, m._data[2, 3]*v.A},
+                {m._data[3, 0]*v.X, m._data[3, 1]*v.Y, m._data[3, 2]*v.Z, m._data[3, 3]*v.A}
+            });*/
+        }
+
         public static Mat4 operator *(Double d, Mat4 m)
         {
             return m.Multiply(d);
@@ -344,6 +383,23 @@ namespace BlockRTS.Core.Maths
             return (_data != null ? _data.GetHashCode() : 0);
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            var m = obj as Mat4;
+            if (m == null)
+            {
+                return false;
+            }
+            return _data[0, 0].NearlyEquals(m._data[0, 0]) && _data[0, 1].NearlyEquals(m._data[0, 1]) && _data[0, 2].NearlyEquals(m._data[0, 2]) && _data[0, 3].NearlyEquals(m._data[0, 3]) && 
+                   _data[1, 0].NearlyEquals(m._data[1, 0]) && _data[1, 1].NearlyEquals(m._data[1, 1]) && _data[1, 2].NearlyEquals(m._data[1, 2]) && _data[1, 3].NearlyEquals(m._data[1, 3]) && 
+                   _data[2, 0].NearlyEquals(m._data[2, 0]) && _data[2, 1].NearlyEquals(m._data[2, 1]) && _data[2, 2].NearlyEquals(m._data[2, 2]) && _data[2, 3].NearlyEquals(m._data[2, 3]) && 
+                   _data[3, 0].NearlyEquals(m._data[3, 0]) && _data[3, 1].NearlyEquals(m._data[3, 1]) && _data[3, 2].NearlyEquals(m._data[3, 2]) && _data[3, 3].NearlyEquals(m._data[3, 3]);
+        }
 
         public static Mat4 LookAt(Vect3 eye, Vect3 target, Vect3 up)
         {

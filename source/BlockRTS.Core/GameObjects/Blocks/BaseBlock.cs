@@ -5,11 +5,12 @@ using BlockRTS.Core.Maths;
 using BlockRTS.Core.Messaging;
 using BlockRTS.Core.Physics;
 using BlockRTS.Core.Physics.Bodys;
+using BlockRTS.Core.Shapes;
 using BlockRTS.Core.Timing;
 
 namespace BlockRTS.Core.GameObjects.Blocks
 {
-    public abstract class BaseBlock:IGameObject,IHasPhysics 
+    public abstract class BaseBlock:IGameObject,IHasPhysics,ICanBeSelected
     {
         public Color BlockColor { get; private set; }
 
@@ -27,6 +28,7 @@ namespace BlockRTS.Core.GameObjects.Blocks
             Id = Guid.NewGuid();
             BlockColor = blockColor;
             Body = new Body(position,rotation);
+            BoundingSphere = new Sphere(Body.Position, Quat.Identity, 10);
         }
 
         public void Update(TickTime delta)
@@ -36,5 +38,7 @@ namespace BlockRTS.Core.GameObjects.Blocks
 
         public IBody Body { get; private set; }
         public Mat4 Velocity { get; private set; }
+
+        public Sphere BoundingSphere { get; private set; }
     }
 }
