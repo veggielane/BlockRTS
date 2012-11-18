@@ -8,6 +8,8 @@ namespace BlockRTS.Core.Maths
 {
     public struct Angle
     {
+
+
         private const double RadToDeg = 180.0 / Math.PI;
         private const double DegToRad = Math.PI / 180.0;
 
@@ -46,7 +48,7 @@ namespace BlockRTS.Core.Maths
 
         public static Angle TwoPI
         {
-            get { return new Angle(); }
+            get { return Angle.FromRadians(Math.PI*2.0); }
         }
 
 
@@ -79,5 +81,24 @@ namespace BlockRTS.Core.Maths
         {
             return angle.Radians;
         }
+
+
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Angle))
+                return false;
+            return Radians.NearlyEquals(((Angle)obj).Radians);
+        }
+        public bool Equals(Angle other)
+        {
+            return Radians.Equals(other.Radians);
+        }
+
+        public override int GetHashCode()
+        {
+            return Radians.GetHashCode();
+        }
+
     }
 }

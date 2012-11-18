@@ -55,6 +55,7 @@
     <Compile Include="GameObjects\IGameObjectFactory.cs" />
     <Compile Include="GameObjects\IHasBoundingSphere.cs" />
     <Compile Include="GameObjects\Planet.cs" />
+    <Compile Include="GameObjects\Ships\TestShip.cs" />
     <Compile Include="Graphics\BindViewAttribute.cs" />
     <Compile Include="Graphics\GUI\IGUI.cs" />
     <Compile Include="Graphics\Lighting\Light.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Graphics\Meshing\Vertex.cs" />
     <Compile Include="Graphics\RTSCamera.cs" />
     <Compile Include="Maths\MathsHelper.cs" />
+    <Compile Include="Maths\Ray.cs" />
     <Compile Include="Physics\Forces\GravityForce.cs" />
     <Compile Include="Shapes\Cube.cs" />
     <Compile Include="Graphics\IViewManager.cs" />

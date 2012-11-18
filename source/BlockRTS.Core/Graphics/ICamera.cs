@@ -10,6 +10,9 @@ namespace BlockRTS.Core.Graphics
     public interface ICamera
     {
         // Vect3 Postion { get; }
+        double Near { get; }
+        double Far { get; }
+
         Mat4 Model { get; set; }
         Mat4 View { get;  }
         Mat4 Projection { get; set; }
@@ -22,6 +25,6 @@ namespace BlockRTS.Core.Graphics
         void Update(double delta);
         void Resize(int width, int height);
 
-        void Pick(int x, int y);
+        Ray Pick(int x, int y);
     }
 }

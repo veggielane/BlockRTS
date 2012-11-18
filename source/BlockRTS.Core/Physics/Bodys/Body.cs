@@ -17,9 +17,9 @@ namespace BlockRTS.Core.Physics.Bodys
         {
             Position = position;
             Rotation = rotation;
-            Velocity = Vect3.Zero;
+            Velocity = new Vect3(1,1,1);//Vect3.Zero);
             AngularVelocity = Quat.Identity;
-            State = BodyState.Resting;
+            State = BodyState.Moving;
         }
 
         public void Update(TickTime delta)

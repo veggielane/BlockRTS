@@ -10,33 +10,27 @@ namespace BlockRTS.Core.Graphics
 {
     public class RTSCamera:ICamera
     {
-        private readonly IGameObjectFactory _factory;
         private readonly IMessageBus _bus;
         private readonly ITimer _timer;
+        private int _width;
+        private int _height;
 
 
-        private readonly float _nearPlane;
-        private readonly float _farPlane;
-
-        public RTSCamera(IGameObjectFactory factory, IMessageBus bus, ITimer timer)
+        public RTSCamera(IMessageBus bus, ITimer timer)
         {
-            _factory = factory;
             _bus = bus;
             _timer = timer;
-
-            _nearPlane = 0.001f;
-            _farPlane = 512.0f;
-
+            Near = 1f;
+            Far = 512.0f;
             Model = Mat4.Identity;
-
             Eye = Vect3.Zero;
             Target = Vect3.Zero;
             Up = Vect3.UnitY;
             Eye = new Vect3(0.0f, 0.0f, 80.0f);
-
         }
 
-
+        public double Near { get; private set; }
+        public double Far { get; private set; }
         public Mat4 Model { get; set; }
 
         
@@ -67,33 +61,18 @@ namespace BlockRTS.Core.Graphics
         {
             _width = width;
             _height = height;
-            Projection = Mat4.CreatePerspectiveFieldOfView(Math.PI / 4, _width / (float)_height, _nearPlane,_farPlane);
+            Projection = Mat4.CreatePerspectiveFieldOfView(Math.PI / 4, _width / (float)_height, Near,Far);
         }
 
-        public void Pick(int x, int y)
+        public Ray Pick(int x, int y)
         {
-            
-            int windowY = y - _height/2;
-            double normY = windowY/(_height/2.0);
-            int windowX = x - _width/2;
-            double normX = windowX/(_width/2.0);
-
-            _bus.Add(new DebugMessage(_timer.LastTickTime, "{0} - {1}".Fmt(normX, normY)));
-
-            //Mat4 inv = (Model*View).Inverse();
-
-
-
-
-            foreach (var gameObject in _factory.GameObjects.Values.OfType<ICanBeSelected>())
-            {
-                //_bus.Add(new DebugMessage(_timer.LastTickTime,"{0}".Fmt(gameObject.Id)));
-            }
+            return new Ray( UnProject(new Vect3(x,y,Near)), UnProject(new Vect3(x,y,Far)));
         }
 
-        private int _width;
-        private int _height;
-
-
+        private Vect3 UnProject(Vect3 win)
+        {
+            var o = MVP.Inverse() * new Vect4((win.X - _width / 2.0) / (_width / 2.0), (win.Y - _height / 2.0) / (_height / 2.0), 2.0 * win.Z - 1.0, 1); 
+            return Math.Abs(o.A - 0.0) < double.Epsilon ? Vect3.Zero : new Vect3(o.X/o.A,o.Y/o.A,o.Z/o.A);
+        }
     }
 }

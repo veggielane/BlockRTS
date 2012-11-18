@@ -32,7 +32,7 @@ namespace BlockRTS.Core.Graphics.OpenGL.Views
         public void Load()
         {
             _shader = _assets.Shader<DefaultShaderProgram>();
-            _vao = new VAO(_shader, new Sphere(Vect3.Zero, Quat.Identity, 10).ToMesh(5, Color.Yellow).ToVBO());
+            _vao = new VAO(_shader, new Sphere(Vect3.Zero, Quat.Identity, ((Explosion)GameObject).Size).ToMesh(5, Color.Yellow).ToVBO());
             Loaded = true;
         }
 

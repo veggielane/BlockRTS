@@ -21,6 +21,7 @@ namespace BlockRTS.Core.Maths
         {
             get { return new Vect2(0.0, 0.0); }
         }
+
     }
 
     public class Vect4
@@ -41,6 +42,11 @@ namespace BlockRTS.Core.Maths
         public static Vect4 Zero
         {
             get { return new Vect4(0, 0, 0, 0); }
+        }
+
+        public Vect3 ToVec3()
+        {
+            return new Vect3(X,Y,Z);
         }
     }
 

@@ -62,9 +62,9 @@ namespace BlockRTS.Core.Maths
             return -d;
         }
 
-        public static bool NearlyEquals(Double x, Double y, Double epsilon = 0.00001)
+        public static bool NearlyEquals(Double x, Double y, Double epsilon = 2E-24)
         {
-            return Abs(x - y) < epsilon;
+            return 2.0*Math.Abs(x - y) <= epsilon*(Math.Abs(x) + Math.Abs(y));
         }
 
         public static Double Round(Double d)

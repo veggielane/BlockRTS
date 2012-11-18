@@ -29,8 +29,8 @@ namespace BlockRTS.Core
             return (max - min) * rnd.NextDouble() + min;
         }
 
-
-        public static bool NearlyEquals(this double x, double y, double epsilon = 0.00001)
+        
+        public static bool NearlyEquals(this double x, double y, double epsilon = 0.00000001)
         {
             return MathsHelper.NearlyEquals(x,y,epsilon);
         }

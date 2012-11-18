@@ -19,8 +19,12 @@ namespace BlockRTS.Core.GameObjects.Blocks
         public Vect3 Position { get { return Body.Position; } }
         public Quat Rotation { get { return Body.Rotation; } }
 
-        //public Mat4 Transformation { get { return Body.Transformation; } }
         public IMessageBus Bus { get; private set; }
+
+        public IBody Body { get; private set; }
+        public Mat4 Velocity { get; private set; }
+
+        public Sphere BoundingSphere { get; private set; }
 
         protected BaseBlock(IMessageBus bus, Vect3 position, Quat rotation, Color blockColor)
         {
@@ -28,17 +32,15 @@ namespace BlockRTS.Core.GameObjects.Blocks
             Id = Guid.NewGuid();
             BlockColor = blockColor;
             Body = new Body(position,rotation);
-            BoundingSphere = new Sphere(Body.Position, Quat.Identity, 10);
+
+            BoundingSphere = new Sphere(Body.Position, Quat.Identity, 1);
         }
 
         public void Update(TickTime delta)
         {
-
+            BoundingSphere.Position = Body.Position;
         }
 
-        public IBody Body { get; private set; }
-        public Mat4 Velocity { get; private set; }
 
-        public Sphere BoundingSphere { get; private set; }
     }
 }

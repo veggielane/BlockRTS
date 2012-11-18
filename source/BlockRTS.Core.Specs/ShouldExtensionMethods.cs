@@ -10,10 +10,11 @@ namespace BlockRTS.Core.Specs
 {
     public static class ShouldExtensionMethods
     {
-        public static double ShouldNearlyEqual(this double actual, double expected, double epsilon)
+
+        public static double ShouldNearlyEqual(this double actual, double expected, double epsilon = 2E-24)
         {
-            var difference = Math.Abs(actual * .0001);
-            if (Math.Abs(actual - expected) <= difference)
+
+            if (actual.NearlyEquals(expected,epsilon))
                 throw new SpecificationException(PrettyPrintingExtensions.FormatErrorMessage(actual, expected));
             return actual;
         }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using BlockRTS.Core.GameObjects;
 using BlockRTS.Core.Graphics.OpenGL.Assets;
 using BlockRTS.Core.Graphics.OpenGL.Assets.Textures;
 using BlockRTS.Core.Graphics.OpenGL.Buffers;
@@ -24,9 +26,10 @@ namespace BlockRTS.Core.Graphics.OpenGL
         private readonly ICamera _camera;
         private readonly IViewManager _viewManager;
         private readonly IAssetManager _assetManager;
+        private readonly IGameObjectFactory _factory;
 
         public OpenGLWindow(IMessageBus bus, ITimer timer, ICamera camera, IViewManager viewManager,
-                            IAssetManager assetManager)
+                            IAssetManager assetManager, IGameObjectFactory factory)
             : base(1280, 720, new GraphicsMode(32, 0, 0, 4), "Test")
         {
             Bus = bus;
@@ -34,9 +37,9 @@ namespace BlockRTS.Core.Graphics.OpenGL
             _camera = camera;
             _viewManager = viewManager;
             _assetManager = assetManager;
-    
-            _camera.Eye = new Vect3(0.0f, 0.0f, 80.0f);
-            _camera.Projection = Mat4.CreatePerspectiveFieldOfView(Math.PI / 2.0, Width / (float)Height, 1, 100);
+            _factory = factory;
+
+
             VSync = VSyncMode.On;
 
             Mouse.WheelChanged += (sender, args) =>
@@ -95,6 +98,10 @@ namespace BlockRTS.Core.Graphics.OpenGL
                 Console.WriteLine("Error at OnLoad: " + err);
         }
         Random rnd = new Random();
+
+
+        private int lastcount = 0;
+
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
 
@@ -127,27 +134,24 @@ namespace BlockRTS.Core.Graphics.OpenGL
                 _camera.Target += new Vect3(0, -0.1, 0);
             }
 
-            int x = Mouse.X;
-            int y = Height - Mouse.Y;
-
-            int windowY = y - Height / 2;
-            double normY = windowY / (Height / 2.0);
-            int windowX = x - Width / 2;
-            double normX = windowX / (Width / 2.0);
-
-
-            var unview = _camera.MVP.Inverse();
-
-            var near = unview * new Vect4(normX, normY, -1, 1); //* Vec(normalised_x, normalised_y, 0, 1)
-            
-
             _viewManager.Update(e.Time);
 
-
             _camera.Update(e.Time);
-            _camera.Pick(Mouse.X, Height - Mouse.Y);
 
-            _dotsvbo.Buffer(new[] { new OpenGLVertex { Position = new Vector3(0, 0, 0) }, new OpenGLVertex { Position = new Vector3((float)near.X, (float)near.Y, (float)near.Z) }, });
+            var ray = _camera.Pick(Mouse.X, Height - Mouse.Y);
+
+            _dotsvbo.Buffer(new[] { new OpenGLVertex { Position = ray.Start.ToVector3() }, new OpenGLVertex { Position = ray.End.ToVector3()}, });
+
+            var hover = _factory.GameObjects.Values.OfType<ICanBeSelected>().Where(gameObject => gameObject.BoundingSphere.Intersects(ray)).Cast<IGameObject>().ToList();
+
+            if (hover.Count != lastcount)
+            {
+                Bus.Add(new DebugMessage(Timer.LastTickTime, "Selection Changed: {0}".Fmt(hover.Count.ToString())));
+            }
+            lastcount = hover.Count;
+
+
+            
 
             _assetManager.UBO<CameraUBO>().Update(_camera);
 
@@ -165,10 +169,6 @@ namespace BlockRTS.Core.Graphics.OpenGL
             _wireframe = !_wireframe;
             GL.PolygonMode(MaterialFace.FrontAndBack, _wireframe ? PolygonMode.Line : PolygonMode.Fill);
         }
-        
-
-
-        
         
 
         protected override void OnRenderFrame(FrameEventArgs e)

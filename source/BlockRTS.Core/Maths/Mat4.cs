@@ -358,14 +358,6 @@ namespace BlockRTS.Core.Maths
                 m._data[2, 0] * v.X + m._data[2, 1] * v.Y + m._data[2, 2] * v.Z +m._data[2, 3] * v.A,
                 m._data[3, 0] * v.X + m._data[3, 1] * v.Y + m._data[3, 2] * v.Z +m._data[3, 3] * v.A
                 );
-            /*
-            return new Mat4(new[,]
-            {
-                {m._data[0, 0]*v.X, m._data[0, 1]*v.Y, m._data[0, 2]*v.Z, m._data[0, 3]*v.A},
-                {m._data[1, 0]*v.X, m._data[1, 1]*v.Y, m._data[1, 2]*v.Z, m._data[1, 3]*v.A},
-                {m._data[2, 0]*v.X, m._data[2, 1]*v.Y, m._data[2, 2]*v.Z, m._data[2, 3]*v.A},
-                {m._data[3, 0]*v.X, m._data[3, 1]*v.Y, m._data[3, 2]*v.Z, m._data[3, 3]*v.A}
-            });*/
         }
 
         public static Mat4 operator *(Double d, Mat4 m)
